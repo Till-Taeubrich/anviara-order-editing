@@ -1,0 +1,25 @@
+{
+  "name": "shopify-hotwire-template",
+  "private": "true",
+  "dependencies": {
+    "@hotwired/stimulus": "^3.2.2",
+    "@hotwired/turbo-rails": "^8.0.12",
+    "@rails/request.js": "^0.0.9",
+    "@shopify/app": "^3.58.2",
+    "@shopify/cli": "^3.71.4",
+    "debounce": "^2.2.0",
+    "dotenv": "^16.4.7",
+    "esbuild": "^0.24.0",
+    "polaris-view-components": "^2.2.2"
+  },
+  "scripts": {
+    "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=assets",
+    "shopify": "shopify",
+    "dev": "shopify app dev",
+    "info": "shopify app info",
+    "config": "shopify app config",
+    "env": "shopify app env",
+    "generate": "shopify app generate",
+    "deploy": "shopify app deploy"
+  }
+}

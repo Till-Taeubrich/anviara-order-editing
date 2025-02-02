@@ -1,0 +1,19 @@
+Rails.application.routes.draw do
+  root to: 'home#index'
+
+  get '/home', to: 'home#index'
+
+  resources :products, only: [:index]
+  resource :messages, only: :create
+  resource :redirect, only: :new
+  resource :settings_page, only: :show, controller: :settings_page
+  resource :components_page, only: :show, controller: :components_page
+  resource :redirect_page, only: :show, controller: :redirect_page
+  resource :frontend_request, only: :create, controller: :frontend_request
+
+  resource :subscription, only: :new do
+    resource :callback, only: :show, module: :subscription
+  end
+
+  mount ShopifyApp::Engine, at: '/'
+end
