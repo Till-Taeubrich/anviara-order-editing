@@ -7,7 +7,7 @@ class AuthenticatedController < ApplicationController
 
   before_action :set_app_bridge_headers
   before_action :set_current_shop
-  before_action :check_subscription
+  # before_action :check_subscription
 
   helper_method :current_shop, :jwt_expire_at, :current_session_id
 
