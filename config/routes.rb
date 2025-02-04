@@ -15,5 +15,11 @@ Rails.application.routes.draw do
     resource :callback, only: :show, module: :subscription
   end
 
+  scope path: :api, format: :json do
+    namespace :webhooks do
+      # add webhook route here
+    end
+  end
+
   mount ShopifyApp::Engine, at: '/'
 end
