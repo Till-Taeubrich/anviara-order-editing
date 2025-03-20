@@ -81,6 +81,7 @@ test:
 #
 production:
   <<: *default
+  url: <%= ENV['RENDER_INTERNAL_DATABASE_URL'] %>
   database: shopify_hotwire_template_production
   username: shopify_hotwire_template
   password: <%= ENV['shopify_hotwire_template_DATABASE_PASSWORD'] %>
