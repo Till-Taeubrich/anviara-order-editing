@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
 class SettingsPageController < AuthenticatedController
-  def show
-  end
+  def show; end
 end

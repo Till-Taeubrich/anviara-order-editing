@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 ShopifyApp.configure do |config|
-  config.application_name = "Shopify Hotwire Template"
-  config.old_secret = ""
-  config.scope = "" # See shopify.app.toml for scopes
+  config.application_name = 'Shopify Hotwire Template'
+  config.old_secret = ''
+  config.scope = '' # See shopify.app.toml for scopes
   # Consult this page for more scope options: https://shopify.dev/api/usage/access-scopes
   config.embedded_app = true
-  config.after_authenticate_job = {job: "AfterAuthenticateJob", inline: true}
-  config.api_version = "2024-04"
-  config.shop_session_repository = "Shop"
+  config.after_authenticate_job = { job: 'AfterAuthenticateJob', inline: true }
+  config.api_version = '2024-04'
+  config.shop_session_repository = 'Shop'
 
   config.reauth_on_access_scope_changes = true
   config.new_embedded_auth_strategy = true
@@ -43,14 +45,14 @@ Rails.application.config.after_initialize do
       api_key: ShopifyApp.configuration.api_key,
       api_secret_key: ShopifyApp.configuration.secret,
       api_version: ShopifyApp.configuration.api_version,
-      host_name: URI(ENV.fetch("HOST", "")).host || "",
+      host_name: URI(ENV.fetch('HOST', '')).host || '',
       scope: ShopifyApp.configuration.scope,
-      is_private: !ENV.fetch("SHOPIFY_APP_PRIVATE_SHOP", "").empty?,
+      is_private: !ENV.fetch('SHOPIFY_APP_PRIVATE_SHOP', '').empty?,
       is_embedded: ShopifyApp.configuration.embedded_app,
       logger: Rails.logger,
       log_level: :info,
-      private_shop: ENV.fetch("SHOPIFY_APP_PRIVATE_SHOP", nil),
-      user_agent_prefix: "ShopifyApp/#{ShopifyApp::VERSION}",
+      private_shop: ENV.fetch('SHOPIFY_APP_PRIVATE_SHOP', nil),
+      user_agent_prefix: "ShopifyApp/#{ShopifyApp::VERSION}"
     )
 
     ShopifyApp::WebhooksManager.add_registrations

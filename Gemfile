@@ -1,46 +1,48 @@
-source "https://rubygems.org"
+# frozen_string_literal: true
+
+source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby file: ".ruby-version"
+ruby file: '.ruby-version'
 
 # backend
-gem "rails", "~> 8.0.0"
-gem "pg", "~> 1.1"
-gem "redis", "~> 5.0"
-gem "puma", "~> 6.0"
-gem "bootsnap", require: false
-gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
-gem "dotenv-rails"
-gem "activerecord-session_store"
+gem 'activerecord-session_store'
+gem 'bootsnap', require: false
+gem 'dotenv-rails'
+gem 'pg', '~> 1.1'
+gem 'puma', '~> 6.0'
+gem 'rails', '~> 8.0.0'
+gem 'redis', '~> 5.0'
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 # shopify
-gem "shopify_app", "~> 22.5.0"
-gem "polaris_view_components", "~> 2.0"
-gem "shopify_graphql", "~> 2.0"
+gem 'polaris_view_components', '~> 2.0'
+gem 'shopify_app', '~> 22.5.0'
+gem 'shopify_graphql', '~> 2.0'
 
 # frontend
-gem "sprockets-rails"
-gem "jsbundling-rails"
-gem "turbo-rails"
-gem "stimulus-rails"
+gem 'jsbundling-rails'
+gem 'sprockets-rails'
+gem 'stimulus-rails'
+gem 'turbo-rails'
 
 group :development, :test do
-  gem "debug", platforms: %i[mri mingw x64_mingw]
-  gem "http_logger"
+  gem 'debug', platforms: %i[mri mingw x64_mingw]
+  gem 'http_logger'
 end
 
 group :development do
-  gem "web-console"
-  gem "pry-rails"
-  gem "hotwire-livereload"
-  gem "foreman"
-  gem "rubocop-shopify", "~> 2.16"
+  gem 'foreman'
+  gem 'hotwire-livereload'
+  gem 'pry-rails'
+  gem 'rubocop-shopify', '~> 2.16'
+  gem 'web-console'
 end
 
 group :test do
-  gem "mocha"
-  gem "capybara"
-  gem "selenium-webdriver"
-  gem "vcr"
-  gem "webmock"
+  gem 'capybara'
+  gem 'mocha'
+  gem 'selenium-webdriver'
+  gem 'vcr'
+  gem 'webmock'
 end

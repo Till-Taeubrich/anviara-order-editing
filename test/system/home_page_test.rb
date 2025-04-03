@@ -1,4 +1,6 @@
-require "application_system_test_case"
+# frozen_string_literal: true
+
+require 'application_system_test_case'
 
 class HomePageTest < ApplicationSystemTestCase
   setup do
@@ -6,12 +8,12 @@ class HomePageTest < ApplicationSystemTestCase
     login(@shop)
   end
 
-  test "navigating to products list" do
+  test 'navigating to products list' do
     visit home_url
 
-    assert_selector "h1", text: "Home"
-    click_on "Products list"
+    assert_selector 'h1', text: 'Home'
+    click_on 'Products list'
 
-    assert_selector "h1", text: "Products list"
+    assert_selector 'h1', text: 'Products list'
   end
 end

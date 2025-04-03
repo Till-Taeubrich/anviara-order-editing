@@ -20,7 +20,7 @@ class AuthenticatedController < ApplicationController
   end
 
   def id_token_param
-    {id_token: shopify_id_token}
+    { id_token: shopify_id_token }
   end
 
   private
@@ -30,16 +30,14 @@ class AuthenticatedController < ApplicationController
   end
 
   def set_app_bridge_headers
-    if jwt_expire_at
-      response.set_header('X-JWT-Expire-At', jwt_expire_at)
-    end
-    if current_session_id
-      response.set_header('X-Shopify-Session-Id', current_session_id)
-    end
+    response.set_header('X-JWT-Expire-At', jwt_expire_at) if jwt_expire_at
+    return unless current_session_id
+
+    response.set_header('X-Shopify-Session-Id', current_session_id)
   end
 
   def turbo_flashes
-    turbo_stream.replace("shopify-app-flash", partial: "layouts/flash_messages.html.erb")
+    turbo_stream.replace('shopify-app-flash', partial: 'layouts/flash_messages.html.erb')
   end
 
   def check_subscription
