@@ -4,7 +4,7 @@ module Subscription
   class CallbacksController < AuthenticatedController
     skip_before_action :check_subscription
 
-    def show
+    def show # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
       subscription_gid = "gid://shopify/AppSubscription/#{params[:charge_id]}"
       subscription = current_shop.with_shopify_session do
         ShopifyGraphql::GetAppSubscription.call(id: subscription_gid).data.subscription

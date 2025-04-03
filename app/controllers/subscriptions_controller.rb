@@ -3,7 +3,7 @@
 class SubscriptionsController < AuthenticatedController
   skip_before_action :check_subscription
 
-  def new
+  def new # rubocop:disable Metrics/MethodLength
     subscription = current_shop.with_shopify_session do
       ShopifyGraphql::CreateRecurringSubscription.call(
         name: 'Test plan',

@@ -13,7 +13,7 @@ end
 module ActionDispatch
   module Session
     class ShopifySessionStore < ActionDispatch::Session::ActiveRecordStore
-      def get_session_model(request, id)
+      def get_session_model(request, id) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
         logger.silence do
           model = get_session_with_fallback(id)
           unless model
