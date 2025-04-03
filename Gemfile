@@ -9,7 +9,7 @@ gem "pg", "~> 1.1"
 gem "redis", "~> 5.0"
 gem "puma", "~> 6.0"
 gem "bootsnap", require: false
-gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
+gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 gem "dotenv-rails"
 gem "activerecord-session_store"
 
@@ -25,7 +25,7 @@ gem "turbo-rails"
 gem "stimulus-rails"
 
 group :development, :test do
-  gem "debug", platforms: %i[ mri mingw x64_mingw ]
+  gem "debug", platforms: %i[mri mingw x64_mingw]
   gem "http_logger"
 end
 
@@ -34,6 +34,7 @@ group :development do
   gem "pry-rails"
   gem "hotwire-livereload"
   gem "foreman"
+  gem "rubocop-shopify", "~> 2.16"
 end
 
 group :test do
