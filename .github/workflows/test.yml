@@ -1,4 +1,4 @@
-name: Tests
+name: CI
 
 on:
   push:
@@ -25,4 +25,24 @@ jobs:
         bundle install
     
     - name: Run tests
-      run: bundle exec rspec 
+      run: bundle exec rspec
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.3.6'
+        bundler-cache: true
+
+    - name: Install dependencies
+      run: |
+        gem install bundler
+        bundle install
+
+    - name: Run RuboCop
+      run: bundle exec rubocop 
