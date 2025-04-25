@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  root to: 'home#index'
+  root to: "home#index"
 
-  get '/home', to: 'home#index'
+  get "/home", to: "home#index"
 
   resources :products, only: [:index]
   resource :messages, only: :create
@@ -23,5 +23,5 @@ Rails.application.routes.draw do
     end
   end
 
-  mount ShopifyApp::Engine, at: '/'
+  mount ShopifyApp::Engine, at: "/"
 end

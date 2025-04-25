@@ -2,6 +2,6 @@
 
 class RedirectsController < AuthenticatedController
   def new
-    fullpage_redirect_to 'https://shopify.dev'
+    fullpage_redirect_to("https://shopify.dev")
   end
 end

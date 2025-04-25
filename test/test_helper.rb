@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-ENV['RAILS_ENV'] ||= 'test'
-require_relative '../config/environment'
-require 'rails/test_help'
-require 'webmock/minitest'
-require 'mocha/minitest'
+ENV["RAILS_ENV"] ||= "test"
+require_relative "../config/environment"
+require "rails/test_help"
+require "webmock/minitest"
+require "mocha/minitest"
 
 VCR.configure do |config|
   config.ignore_localhost = true
-  config.cassette_library_dir = 'test/vcr_cassettes'
-  config.hook_into :webmock
+  config.cassette_library_dir = "test/vcr_cassettes"
+  config.hook_into(:webmock)
   config.allow_http_connections_when_no_cassette = true
 end
 
@@ -31,10 +31,10 @@ module ActiveSupport
 
     def enable_vcr
       absolute_test_path = method(name).source_location.first
-      relative_test_path = absolute_test_path.gsub(Rails.root.to_s, '')
-      vcr_path = relative_test_path.gsub(%r{^/test/}, '').gsub(/.rb$/, '')
+      relative_test_path = absolute_test_path.gsub(Rails.root.to_s, "")
+      vcr_path = relative_test_path.gsub(%r{^/test/}, "").gsub(/.rb$/, "")
 
-      VCR.insert_cassette "#{vcr_path}/#{name}", preserve_exact_body_bytes: true
+      VCR.insert_cassette("#{vcr_path}/#{name}", preserve_exact_body_bytes: true)
     end
 
     def disable_vcr
@@ -52,10 +52,10 @@ module ActionDispatch
     def login(shop)
       stubbed_session = ShopifyAPI::Auth::Session.new(
         shop: shop.shopify_domain,
-        access_token: shop.shopify_token
+        access_token: shop.shopify_token,
       )
-      ShopifyAPI::Utils::SessionUtils.stubs(:current_session_id).returns('session_id')
-      ShopifyAPI::Utils::SessionUtils.stubs(:session_id_from_shopify_id_token).returns('session_id')
+      ShopifyAPI::Utils::SessionUtils.stubs(:current_session_id).returns("session_id")
+      ShopifyAPI::Utils::SessionUtils.stubs(:session_id_from_shopify_id_token).returns("session_id")
       ShopifyApp::SessionRepository.stubs(:load_session).returns(stubbed_session)
     end
 

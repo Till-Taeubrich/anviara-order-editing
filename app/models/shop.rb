@@ -8,7 +8,7 @@ class Shop < ActiveRecord::Base
   end
 
   def shop_handle
-    shopify_domain.split('.myshopify.com').first
+    shopify_domain.split(".myshopify.com").first
   end
 
   def admin_url(path = nil)

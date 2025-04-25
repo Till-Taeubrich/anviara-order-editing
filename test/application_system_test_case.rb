@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 Capybara.server = :puma, { Silent: true }
 Capybara.default_max_wait_time = 15
@@ -15,10 +15,10 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   def login(shop)
     stubbed_session = ShopifyAPI::Auth::Session.new(
       shop: shop.shopify_domain,
-      access_token: shop.shopify_token
+      access_token: shop.shopify_token,
     )
-    ShopifyAPI::Utils::SessionUtils.stubs(:current_session_id).returns('session_id')
-    ShopifyAPI::Utils::SessionUtils.stubs(:session_id_from_shopify_id_token).returns('session_id')
+    ShopifyAPI::Utils::SessionUtils.stubs(:current_session_id).returns("session_id")
+    ShopifyAPI::Utils::SessionUtils.stubs(:session_id_from_shopify_id_token).returns("session_id")
     ShopifyApp::SessionRepository.stubs(:load_session).returns(stubbed_session)
   end
 

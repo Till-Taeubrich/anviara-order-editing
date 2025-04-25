@@ -26,23 +26,23 @@ class AuthenticatedController < ApplicationController
   private
 
   def current_session_id
-    @current_session_id ||= params[:session].presence || request.headers['X-Shopify-Session-Id']
+    @current_session_id ||= params[:session].presence || request.headers["X-Shopify-Session-Id"]
   end
 
   def set_app_bridge_headers
-    response.set_header('X-JWT-Expire-At', jwt_expire_at) if jwt_expire_at
+    response.set_header("X-JWT-Expire-At", jwt_expire_at) if jwt_expire_at
     return unless current_session_id
 
-    response.set_header('X-Shopify-Session-Id', current_session_id)
+    response.set_header("X-Shopify-Session-Id", current_session_id)
   end
 
   def turbo_flashes
-    turbo_stream.replace('shopify-app-flash', partial: 'layouts/flash_messages.html.erb')
+    turbo_stream.replace("shopify-app-flash", partial: "layouts/flash_messages.html.erb")
   end
 
   def check_subscription
     return if current_shop.subscription_active?
 
-    redirect_to new_subscription_path(**id_token_param)
+    redirect_to(new_subscription_path(**id_token_param))
   end
 end

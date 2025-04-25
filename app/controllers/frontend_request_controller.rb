@@ -2,6 +2,6 @@
 
 class FrontendRequestController < AuthenticatedController
   def create
-    render json: { message: 'Hello from backend' }
+    render(json: { message: "Hello from backend" })
   end
 end

@@ -2,6 +2,6 @@
 
 class RedirectPageController < AuthenticatedController
   def show
-    redirect_to products_path
+    redirect_to(products_path)
   end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class HomeControllerTest < ActionDispatch::IntegrationTest
   setup do
@@ -8,10 +8,10 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
     login(@shop)
   end
 
-  test 'renders home page' do
+  test "renders home page" do
     get home_path
 
     assert_response :success
-    assert_select 'h1', 'Home'
+    assert_select "h1", "Home"
   end
 end
