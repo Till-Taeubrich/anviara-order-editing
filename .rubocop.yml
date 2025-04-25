@@ -1,2 +1,11 @@
-Documentation:
+inherit_gem:
+  rubocop-shopify: rubocop.yml
+
+AllCops:
+  NewCops: enable
+  Exclude:
+    - 'db/schema.rb'
+    - 'db/migrate/*'
+
+Style/Documentation:
   Enabled: false
