@@ -77,4 +77,6 @@ Rails.application.configure do
 
   # App config
   config.force_iframe = ENV["DISABLE_IFRAME"] != "1"
+
+  config.log_level = :info
 end
