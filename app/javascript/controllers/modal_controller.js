@@ -1,3 +1,5 @@
+// activeConfirmation ( used in .js ) is created in confirmation_controller before confirm() get's called
+
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
