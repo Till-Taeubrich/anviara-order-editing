@@ -9,7 +9,7 @@ class AuthenticatedController < ApplicationController
   before_action :set_current_shop
   # before_action :check_subscription
 
-  helper_method :current_shop, :jwt_expire_at, :current_session_id
+  helper_method :current_shop, :jwt_expire_at, :current_session_id, :dev_admin?
 
   def set_current_shop
     @current_shop = Shop.find_by(shopify_domain: current_shopify_domain)
@@ -44,5 +44,9 @@ class AuthenticatedController < ApplicationController
     return if current_shop.subscription_active?
 
     redirect_to(new_subscription_path(**id_token_param))
+  end
+
+  def dev_admin?
+    Rails.env.development? || current_shop.shopify_domain == "dev-apptesting-store.myshopify.com"
   end
 end
