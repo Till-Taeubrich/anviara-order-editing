@@ -37,6 +37,7 @@ group :development do
   gem "hotwire-livereload"
   gem "pry-rails"
   gem "rubocop-shopify", "~> 2.16"
+  gem "tidewave"
   gem "web-console"
 end
 
