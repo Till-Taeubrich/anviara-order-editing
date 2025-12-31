@@ -1,0 +1,45 @@
+---
+description: Canonical reference for “37signals style rails” and the source links for the 37signals Dev articles summarized in this repo.
+alwaysApply: true
+---
+# 37signals style rails (index + sources)
+
+## Definition
+
+**Default behavior (always)**: When writing code, **always** default to these 37signals style rails preferences unless the user explicitly asks for a different style/architecture.
+
+**Shorthand**: If the user says **“37signals style rails”**, treat it as an explicit reference to the same preferences below.
+
+### Architectural / design preferences
+
+- Prefer **vanilla Rails** over extra architectural layers by default
+- Prefer **rich domain models** with **domain language** and expressive naming
+- Use Rails “sharp knives” (e.g., **callbacks**, request-scoped **CurrentAttributes**) **pragmatically** when they reduce coupling/boilerplate and improve clarity
+- Build code as a **fractal of good abstractions** (domain-driven, encapsulated, cohesive, symmetric at every level)
+- Embrace **Active Record** as a deliberate blend of persistence + domain logic (encapsulate details; avoid dogmatic separation)
+- Use **concerns** for cohesive traits/roles and as “doors” to subsystems, not as arbitrary file-splitting
+
+### How to apply these in practice
+
+- **Default to these preferences for all code**.
+- **Pull in the per-article rules when relevant** (e.g., no need to use Active Record rule when not using active record).
+  - See the `37signals-*` rules in `.cursor/rules/` for deeper, situational guidance.
+
+If a future question needs the original nuance or examples, **consult the full articles below**.
+
+## Full articles (sources)
+
+- `https://dev.37signals.com/globals-callbacks-and-other-sacrileges/`
+- `https://dev.37signals.com/domain-driven-boldness/`
+- `https://dev.37signals.com/fractal-journeys/`
+- `https://dev.37signals.com/good-concerns/`
+- `https://dev.37signals.com/vanilla-rails-is-plenty/`
+- `https://dev.37signals.com/active-record-nice-and-blended/`
+
+## How these rules are organized here
+
+Each article has its own Cursor rule summary:
+
+- See the six `37signals-*` rule files in `.cursor/rules/`.
+- Each summary rule references this index file for sources and shared terminology.
+

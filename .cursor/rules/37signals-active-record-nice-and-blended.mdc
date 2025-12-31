@@ -1,0 +1,32 @@
+---
+description: 37signals guidance on embracing Active Record as a persistence+domain blend; encapsulate details instead of isolating persistence.
+alwaysApply: false
+---
+# 37signals: Active Record, nice and blended
+
+Reference index: `.cursor/rules/37signals-style-rails-index.mdc`
+
+## Architectural / design rules
+
+- **Reframe the separation question**:
+  - Active Record (the pattern) combines persistence + domain logic; 37signals treats this as a feature when the ORM makes it workable.
+- **Prefer an impedance-less match over strict layering**:
+  - A good ORM reduces object-relational impedance mismatch so the code can read naturally and stay expressive.
+- **Lean on Active Record’s primitives for rich models**:
+  - Use associations, STI, serialized attributes, delegated types, etc., to persist rich object models directly.
+- **Keep encapsulation strong even with AR**:
+  - Wrap persistence details in private methods and domain-level APIs so callers don’t absorb query/persistence complexity.
+  - Use POROs/objects when complexity warrants it; AR doesn’t prevent proper OO design.
+- **Beware the cost of persistence isolation**:
+  - A strict “persistence-free domain model” often adds orchestration overhead and can make rich domain logic harder (or pushes you toward anemic models).
+- **Active Record is still a tool (avoid mess)**:
+  - Blending persistence with domain logic can become unmaintainable if responsibilities are mixed arbitrarily—use good boundaries and cohesive abstractions.
+
+## Default stance in this codebase
+
+When the user says **“37signals style rails”**, these rules apply (see `.cursor/rules/37signals-style-rails-index.mdc`).
+
+## Source
+
+`https://dev.37signals.com/active-record-nice-and-blended/`
+

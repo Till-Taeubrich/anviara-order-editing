@@ -1,0 +1,29 @@
+---
+description: 37signals guidance on bold domain language and modeling: make code speak the business with intentional, vivid names.
+alwaysApply: false
+---
+# 37signals: Domain driven boldness
+
+Reference index: `.cursor/rules/37signals-style-rails-index.mdc`
+
+## Architectural / design rules
+
+- **Don’t be aseptic; double down on boldness**:
+  - Prefer vivid, domain-specific names that convey the concept precisely (often more memorable than generic CRUD vocabulary).
+- **Model domain concepts as first-class code**:
+  - Represent “what the system is” in the language of the domain (entities, roles, states, and operations).
+- **Use naming to encode meaning and constraints**:
+  - A name like “petition” vs “request” carries policy/intent; use that to make domain rules self-evident.
+- **Use role-like modularization when it clarifies the domain**:
+  - Concerns (or similar composition) can express domain roles (“Examiner”, “Petitioner”) when they form cohesive units.
+- **Write plain-text domain descriptions first**:
+  - Use a short written description as a thinking tool to shape the domain model before or while coding.
+
+## Default stance in this codebase
+
+When the user says **“37signals style rails”**, these rules apply (see `.cursor/rules/37signals-style-rails-index.mdc`).
+
+## Source
+
+`https://dev.37signals.com/domain-driven-boldness/`
+

@@ -1,0 +1,42 @@
+---
+description: 37signals guidance on Rails concerns: where they live, how to keep them cohesive, and how they complement OO design.
+alwaysApply: false
+---
+# 37signals: Good concerns
+
+Reference index: `.cursor/rules/37signals-style-rails-index.mdc`
+
+## Architectural / design rules
+
+## Placement conventions
+
+- **Default use-case**: concerns are primarily used to organize **one host model’s** cohesive traits/roles (not as grab-bag shared modules).
+- **Common model concerns**: put in `app/models/concerns`.
+- **Model-specific concerns**: put in `app/models/<model_name>/...` and include without repeating namespaces.
+- **Controller concerns**: place most in `app/controllers/concerns`, with subsystem-specific subfolders as needed.
+
+## What belongs in a concern
+
+- **Concerns should be cohesive traits/roles**:
+  - A concern should reflect “has trait” / “acts as” semantics.
+  - Don’t use concerns as arbitrary buckets just to split a large file.
+- **Concerns improve readability when used to manage complexity**:
+  - Split by coherent concepts so the reader can focus on one thing at a time.
+- **Concerns can be domain-oriented abstractions**:
+  - Names should capture domain roles and concepts clearly.
+
+## Concerns are not a replacement for OO design
+
+- **Use concerns to offer a nice domain API, but hide subsystems behind it**:
+  - A concern can provide the public “door” method(s) while delegating to POROs / composed objects for the heavy work.
+- **Avoid “fat and flat” models as the endgame**:
+  - Concerns should work alongside composition/inheritance/patterns, not excuse poor responsibility distribution.
+
+## Default stance in this codebase
+
+When the user says **“37signals style rails”**, these rules apply (see `.cursor/rules/37signals-style-rails-index.mdc`).
+
+## Source
+
+`https://dev.37signals.com/good-concerns/`
+
