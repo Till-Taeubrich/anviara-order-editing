@@ -1,0 +1,76 @@
+---
+description: Tidewave MCP connection troubleshooting and user prompts
+globs:
+alwaysApply: true
+---
+# Tidewave MCP Connection
+
+## Issue
+
+The Tidewave MCP (Model Context Protocol) server does not automatically connect when the development server starts. It requires manual toggling (disable + enable) after starting the app with `yarn dev` to establish a connection.
+
+## Detection and Prompting
+
+### When to Check
+
+The agent MUST check for Tidewave MCP connection status when:
+
+1. **Development server is running**: The user has started the app with `yarn dev` (which runs `shopify app dev`)
+2. **MCP connection is needed**: Any operation that would benefit from or require Tidewave MCP functionality
+3. **Connection appears unavailable**: When MCP resources or tools are not accessible
+
+### How to Detect
+
+Indicators that the app is running:
+- User mentions `yarn dev` or `shopify app dev` was executed
+- User is actively developing or testing the application
+- Process logs or terminal output suggest the server is running
+- User is working on features that would typically use Tidewave MCP
+
+Indicators that Tidewave MCP is not connected:
+- MCP resources cannot be listed or accessed
+- Tidewave-specific tools are unavailable
+- User reports issues accessing Tidewave functionality
+- MCP server connection errors appear
+
+### User Prompt
+
+When the agent detects that:
+- The development server is running (or was started with `yarn dev`)
+- AND Tidewave MCP is not connected/enabled
+
+The agent MUST prompt the user with:
+
+```
+⚠️ Tidewave MCP Connection Required
+
+It appears your development server is running, but the Tidewave MCP server may not be connected.
+
+To establish the connection:
+1. Open Cursor's MCP settings
+2. Disable the Tidewave MCP server
+3. Re-enable the Tidewave MCP server
+
+This toggle is required after starting the app with `yarn dev` to establish the MCP connection.
+
+Would you like me to wait while you toggle the connection, or would you prefer to continue without Tidewave MCP for now?
+```
+
+### Best Practices
+
+1. **Proactive Checking**: Check MCP connection status early in the conversation if the user mentions development work
+2. **Clear Instructions**: Provide step-by-step instructions for toggling the MCP connection
+3. **Non-Blocking**: Don't block the conversation - allow the user to continue without MCP if preferred
+4. **Follow-up**: After prompting, check again if the user indicates they've toggled the connection
+
+### Technical Context
+
+- **Tidewave**: Development tooling gem (`tidewave ~> 0.4.1`) that provides MCP server functionality
+- **MCP**: Model Context Protocol - allows AI assistants to access development tools and resources
+- **Connection Pattern**: The MCP server starts when the Rails app runs, but Cursor needs to reconnect after app startup
+- **Workaround**: Toggling the MCP connection in Cursor settings forces a reconnection to the running server
+
+## Related Commands
+
+- `yarn dev` - Starts the Shopify development server (triggers Tidewave MCP server)
+- `bin/dev` - Alternative development server command (also triggers Tidewave)
