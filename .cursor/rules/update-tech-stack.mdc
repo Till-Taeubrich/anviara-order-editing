@@ -1,0 +1,170 @@
+---
+alwaysApply: false
+---
+# Update Dependencies Rule
+
+This rule provides a manual process to analyze all major dependencies and update the tech-stack documentation with the latest installed versions.
+
+## When to Use This Rule
+
+Run this rule manually when:
+- Dependencies have been updated (via `bundle update` or `yarn upgrade`)
+- You want to verify current dependency versions match documentation
+- You need to document new dependencies or version changes
+- After major dependency upgrades or security updates
+
+## Process
+
+### Step 1: Analyze Ruby Dependencies
+
+1. **Read `Gemfile`** to understand version constraints:
+   - Note gems with `~>` constraints (allows patch updates)
+   - Identify gems with exact versions
+   - Note special cases (e.g., GitHub sources)
+
+2. **Read `Gemfile.lock`** to extract actual installed versions:
+   - Find the actual version numbers for each gem
+   - Note transitive dependencies that are important
+   - Identify version constraints from the lock file
+
+3. **Key Ruby dependencies to document**:
+   - Core runtime: Ruby version (from `.ruby-version`), Bundler version
+   - Rails framework and related gems
+   - Database: PostgreSQL (`pg`), session store
+   - Web server: Puma
+   - Caching: Redis
+   - Shopify gems: `shopify_app`, `shopify_graphql`, `shopify_api`, `polaris_view_components`
+   - Hotwire: `turbo-rails`, `stimulus-rails`
+   - Asset pipeline: `jsbundling-rails`, `sprockets-rails`
+   - Development tools: testing, code quality, debugging tools
+
+### Step 2: Analyze JavaScript Dependencies
+
+1. **Read `package.json`** to understand version constraints:
+   - Note packages with `^` constraints (allows minor/patch updates)
+   - Identify packages with exact versions
+   - Note package manager (Yarn)
+
+2. **Read `yarn.lock`** to extract actual installed versions:
+   - Find the actual version numbers for each package
+   - Note transitive dependencies that are important
+   - Verify build tools and their versions
+
+3. **Key JavaScript dependencies to document**:
+   - Hotwire: `@hotwired/turbo-rails`, `@hotwired/stimulus`
+   - Request.js: `@rails/request.js`
+   - Shopify CLI: `@shopify/app`, `@shopify/cli`
+   - UI Components: `polaris-view-components`
+   - Build tools: `esbuild`
+   - Utilities: `debounce`, `dotenv`
+
+### Step 3: Update tech-stack.mdc
+
+Update `.cursor/rules/tech-stack.mdc` with the following information:
+
+1. **Version Numbers**:
+   - Update all "currently" version numbers from lock files
+   - Keep version constraints from `Gemfile`/`package.json` (e.g., `~> 8.0.0`, `^3.2.2`)
+   - Format: `**Gem Name**: `~> constraint` (currently `actual.version`)`
+
+2. **Best Practices**:
+   - Update best practices based on new versions
+   - Note any breaking changes or new features in major versions
+   - Update compatibility matrix if versions change significantly
+   - Add migration notes for major version upgrades
+
+3. **Structure to Maintain**:
+   - Keep the existing section structure
+   - Maintain consistency in formatting
+   - Preserve all existing best practices unless they're outdated
+   - Add notes about version-specific features or considerations
+
+### Step 4: Verification
+
+After updating the documentation:
+
+1. **Cross-reference**:
+   - Verify version numbers match between lock files and documentation
+   - Ensure version constraints are correctly documented
+   - Check that all major dependencies are covered
+
+2. **Completeness Check**:
+   - All major runtime dependencies are documented
+   - Development dependencies are listed
+   - Version compatibility matrix is accurate
+   - Best practices reflect current versions
+
+## Example Analysis Pattern
+
+When analyzing dependencies, follow this pattern:
+
+```ruby
+# From Gemfile
+gem "rails", "~> 8.0.0"
+
+# From Gemfile.lock
+rails (8.0.0)
+
+# Documentation format
+- **Rails**: `~> 8.0.0` (currently `8.0.0`)
+```
+
+```json
+// From package.json
+"@hotwired/turbo-rails": "^8.0.12"
+
+// From yarn.lock
+"@hotwired/turbo-rails@^8.0.12":
+  version "8.0.12"
+
+// Documentation format
+- **@hotwired/turbo-rails**: `^8.0.12` (currently `8.0.12`)
+```
+
+## Important Notes
+
+1. **Version Sources**:
+   - Always use `Gemfile.lock` and `yarn.lock` for actual installed versions
+   - Use `Gemfile` and `package.json` for version constraints
+   - Never guess or assume versions
+
+2. **Transitive Dependencies**:
+   - Only document transitive dependencies if they're significant (e.g., `shopify_api` as a dependency of `shopify_app`)
+   - Note when a dependency is pulled in by another gem/package
+
+3. **Special Cases**:
+   - GitHub sources (e.g., `rspec-rails` from GitHub master)
+   - Pre-release versions
+   - Platform-specific dependencies
+
+4. **Version Formatting**:
+   - Use backticks for version numbers in documentation
+   - Include both constraint and actual version when relevant
+   - Note source when different from RubyGems/npm (e.g., GitHub)
+
+## Command Reference
+
+Useful commands for dependency analysis:
+
+```bash
+# Ruby dependencies
+bundle list                    # List all gems with versions
+bundle outdated               # Check for outdated gems
+bundle audit                  # Security audit
+
+# JavaScript dependencies
+yarn list                     # List all packages with versions
+yarn outdated                 # Check for outdated packages
+yarn audit                    # Security audit
+```
+
+## Updating Process Summary
+
+1. Read `Gemfile` and `Gemfile.lock` → Extract Ruby dependency versions
+2. Read `package.json` and `yarn.lock` → Extract JavaScript dependency versions
+3. Update `.cursor/rules/tech-stack.mdc` with:
+   - Current version numbers from lock files
+   - Version constraints from dependency files
+   - Updated best practices for new versions
+   - Compatibility matrix updates if needed
+4. Verify all major dependencies are documented accurately
