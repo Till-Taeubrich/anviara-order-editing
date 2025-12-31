@@ -1,0 +1,279 @@
+---
+description: Directory structure and important files in this repository
+globs: **/*
+alwaysApply: true
+---
+
+# Project Structure
+
+This document outlines the directory structure and important files in this repository.
+
+## Root Level Files
+
+- `Gemfile` / `Gemfile.lock` - Ruby dependencies managed by Bundler
+- `package.json` / `yarn.lock` - JavaScript dependencies managed by Yarn
+- `README.md` - Project documentation and setup instructions
+- `Rakefile` - Rake task definitions
+- `config.ru` - Rack application configuration
+- `Procfile` / `Procfile.dev` - Process definitions for Heroku/development
+- `shopify.web.toml` - Shopify CLI configuration for web app settings
+
+## Application Directory (`app/`)
+
+### Controllers (`app/controllers/`)
+- `application_controller.rb` - Base controller for all controllers
+- `authenticated_controller.rb` - Base controller for authenticated routes (includes subscription check, JWT handling, and Turbo Stream utilities)
+- `frontend_request_controller.rb` - Handles frontend requests
+- `home_controller.rb` - Home page controller
+- `products_controller.rb` - Products listing controller
+- `messages_controller.rb` - Messages handling
+- `redirects_controller.rb` / `redirect_page_controller.rb` - Redirect handling
+- `settings_page_controller.rb` - Settings page controller
+- `components_page_controller.rb` - Components demo page
+- `subscriptions_controller.rb` - Subscription management
+- `subscription/callbacks_controller.rb` - Subscription webhook callbacks
+- `concerns/` - Shared controller concerns (currently empty)
+
+### Models (`app/models/`)
+- `application_record.rb` - Base model class
+- `shop.rb` - Shop model (main Shopify shop entity)
+- `concerns/` - Shared model concerns (currently empty)
+
+### Views (`app/views/`)
+- `layouts/` - Application layouts
+  - `application.html.erb` - Main application layout
+  - `embedded_app.html.erb` - Embedded app layout for Shopify admin
+  - `embedded_app.turbo_stream.erb` - Turbo Stream version of embedded layout
+  - `mailer.html.erb` / `mailer.text.erb` - Email templates
+  - `_flash_messages.html.erb` / `_flash_messages.turbo_stream.erb` - Flash message partials
+  - `_navigation_menu.html.erb` - Navigation menu partial
+- `home/` - Home page views
+  - `index.html.erb`
+- `products/` - Products views
+  - `index.html.erb`
+- `settings_page/` - Settings page views
+  - `show.html.erb`
+- `components_page/` - Components demo views
+  - `show.html.erb`
+  - `_modals.html.erb`
+
+### JavaScript (`app/javascript/`)
+- `application.js` - Main JavaScript entry point
+- `controllers/` - Stimulus controllers
+  - `application.js` - Base Stimulus controller
+  - `index.js` - Controller registration
+  - `confirmation_controller.js` - Confirmation dialogs
+  - `flash_controller.js` - Flash message handling
+  - `frontend_request_controller.js` - Frontend request handling
+  - `modal_controller.js` - Modal dialogs
+  - `modal_opener_controller.js` - Modal opening triggers
+  - `navigation_menu_controller.js` - Navigation menu behavior
+  - `resource_picker_controller.js` - Shopify resource picker integration
+- `shopify_app/` - Shopify-specific JavaScript utilities
+  - `index.js` - Shopify app utilities entry point
+  - `shopify_app.js` - Main Shopify app integration
+  - `flash_messages.js` - Flash message utilities
+  - `progress_bar.js` - Progress bar component
+  - `request.js` - Request handling with JWT
+
+### Assets (`app/assets/`)
+- `builds/` - Compiled asset outputs (empty, generated during build)
+- `config/manifest.js` - Asset pipeline manifest
+- `images/` - Image assets (currently empty)
+- `stylesheets/application.css` - Main stylesheet
+
+### GraphQL (`app/graphql/`)
+- `get_products.rb` - GraphQL query for fetching products
+- GraphQL queries are called using `current_shop.with_shopify_session { GetProducts.call.data }` pattern
+
+### Jobs (`app/jobs/`)
+- `application_job.rb` - Base job class
+- `after_authenticate_job.rb` - Job executed after shop authentication
+
+### Mailers (`app/mailers/`)
+- `application_mailer.rb` - Base mailer class
+
+### Middlewares (`app/middlewares/`)
+- `shopify_session_middleware.rb` - Shopify session management middleware
+
+### Channels (`app/channels/`)
+- `application_cable/` - Action Cable configuration
+  - `channel.rb` - Base channel class
+  - `connection.rb` - WebSocket connection handling
+
+### Helpers (`app/helpers/`)
+- `application_helper.rb` - Application-wide view helpers
+
+## Configuration Directory (`config/`)
+
+### Core Configuration
+- `application.rb` - Main application configuration
+- `boot.rb` - Application boot configuration
+- `environment.rb` - Environment setup
+- `routes.rb` - Application routes definition
+- `puma.rb` - Puma web server configuration
+- `database.yml` - Database configuration
+- `cable.yml` - Action Cable configuration
+- `storage.yml` - Active Storage configuration
+
+### Environment-Specific (`config/environments/`)
+- `development.rb` - Development environment settings
+- `production.rb` - Production environment settings
+- `test.rb` - Test environment settings
+
+### Initializers (`config/initializers/`)
+- `shopify_app.rb` - Shopify app gem configuration (includes billing setup)
+- `application_controller_renderer.rb` - Controller renderer configuration
+- `assets.rb` - Asset pipeline configuration
+- `backtrace_silencers.rb` - Error backtrace filtering
+- `content_security_policy.rb` - CSP configuration
+- `cookies_serializer.rb` - Cookie serialization
+- `filter_parameter_logging.rb` - Parameter filtering for logs
+- `inflections.rb` - ActiveSupport inflections
+- `mime_types.rb` - MIME type definitions
+- `permissions_policy.rb` - Permissions policy
+- `session_store.rb` - Session storage configuration
+- `wrap_parameters.rb` - Parameter wrapping configuration
+
+### Locales (`config/locales/`)
+- `en.yml` - English translations
+
+## Database Directory (`db/`)
+
+### Migrations (`db/migrate/`)
+- `20210208164810_create_shops.rb` - Initial shops table
+- `20210531142437_add_shop_access_scopes_column.rb` - Add access scopes to shops
+- `20230805162907_add_shopify_host_to_shops.rb` - Add shopify_host column (deprecated)
+- `20240622071506_add_subscription_active_to_shops.rb` - Add subscription status
+- `20240624091352_remove_shopify_host_from_shops.rb` - Remove shopify_host column
+- `20240624105335_add_sessions_table.rb` - Add sessions table
+
+### Other Database Files
+- `schema.rb` - Current database schema (auto-generated)
+- `seeds.rb` - Database seed data
+
+## Test Directories
+
+### Spec (`spec/`) - Primary Testing Framework
+- `spec_helper.rb` - RSpec configuration
+- `rails_helper.rb` - Rails-specific RSpec configuration
+
+### Test (`test/`) - Legacy/Minimal Tests
+- `test_helper.rb` - Test configuration
+- `application_system_test_case.rb` - System test base class
+- `controllers/` - Controller tests
+  - `home_controller_test.rb`
+- `channels/` - Channel tests
+  - `application_cable/connection_test.rb`
+- `fixtures/` - Test fixtures
+  - `shops.yml` - Shop test data
+  - `files/` - File fixtures
+- `system/` - System tests
+  - `home_page_test.rb`
+- `vcr_cassettes/` - VCR HTTP recording cassettes
+  - `system/home_page_test/test_navigating_to_products_list.yml`
+- `helpers/` - Helper tests (currently empty)
+- `integration/` - Integration tests (currently empty)
+- `mailers/` - Mailer tests (currently empty)
+- `models/` - Model tests (currently empty)
+
+## Build and Development
+
+### Bin Scripts (`bin/`)
+- `bundle` - Bundler wrapper
+- `dev` - Development server launcher
+- `rails` - Rails CLI wrapper
+- `rake` - Rake wrapper
+- `setup` - Initial setup script
+
+### Temporary Files (`tmp/`)
+- `cache/` - Application cache (Bootsnap, etc.)
+- `pids/` - Process ID files
+- `local_secret.txt` - Local development secrets
+
+### Logs (`log/`)
+- `development.log` - Development environment logs
+- `tidewave.log` - Additional logging
+
+### Storage (`storage/`)
+- Active Storage file uploads directory
+
+### Public Assets (`public/`)
+- Static files served directly
+- Error pages: `400.html`, `404.html`, `406-unsupported-browser.html`, `422.html`, `500.html`
+- Icons: `favicon.ico`, `icon.png`, `icon.svg`, `apple-touch-icon*.png`
+- `robots.txt` - Search engine crawler instructions
+
+## Library Code (`lib/`)
+- `assets/` - Library assets (currently empty)
+- `tasks/` - Custom Rake tasks (currently empty)
+
+## Vendor (`vendor/`)
+- Third-party code and assets
+
+## Important Notes
+
+1. **Hotwire Integration**: The app uses Turbo (via Hotwire) for dynamic page updates. Look for `.turbo_stream.erb` templates and Turbo Stream responses in controllers.
+
+2. **Shopify App Structure**: This is a Shopify embedded app using:
+   - AppBridge 4 for admin UI integration
+   - JWT authentication for Turbo and Request.js
+   - Shopify CLI 3 for development
+
+3. **Billing**: Subscription management is handled through `shopify_app` gem configuration. The `authenticated_controller.rb` includes subscription checks.
+
+4. **Stimulus Controllers**: JavaScript functionality is organized using Stimulus controllers in `app/javascript/controllers/`.
+
+5. **GraphQL**: Shopify API interactions use GraphQL queries defined in `app/graphql/`.
+
+6. **Testing**: The project uses RSpec (`spec/`) as the primary testing framework.
+
+7. **Asset Pipeline**: Uses modern asset pipeline with `app/assets/builds/` for compiled outputs.
+
+## Important Utilities and Conventions
+
+### AuthenticatedController Helper Methods
+
+The `AuthenticatedController` provides several helper methods available to all authenticated controllers:
+
+- `current_shop` - Current shop instance (Shop model)
+- `jwt_expire_at` - JWT token expiration timestamp
+- `current_session_id` - Current Shopify session ID
+- `dev_admin?` - Returns true in development or for dev testing store
+
+### Controller Utilities
+
+- `turbo_flashes` - Private method that renders flash messages via Turbo Stream. Use `respond_to { |format| format.turbo_stream { turbo_flashes } }` to update flash messages dynamically.
+- `id_token_param` - Returns hash with `id_token` for passing JWT tokens in redirects/URLs
+- `default_url_options` - Automatically includes `shop` and `session` parameters in all generated URLs
+
+### JWT Authentication Integration
+
+- **Turbo Requests**: JWT tokens are automatically appended to Turbo requests via `app/javascript/shopify_app/shopify_app.js`. The token is retrieved from AppBridge and cached until expiration.
+- **Request.js**: JWT tokens are automatically added to Request.js requests via `app/javascript/shopify_app/request.js` using RequestInterceptor.
+- **Response Headers**: Controllers automatically set `X-JWT-Expire-At` and `X-Shopify-Session-Id` headers via `set_app_bridge_headers` before_action.
+
+### GraphQL Query Pattern
+
+GraphQL queries should be executed within a Shopify session block:
+
+```ruby
+@products = current_shop.with_shopify_session do
+  GetProducts.call.data
+end
+```
+
+### Turbo Stream Conventions
+
+- Use `.turbo_stream.erb` templates for Turbo Stream responses
+- Flash messages are updated via the `shopify-app-flash` element ID
+- The `embedded_app.turbo_stream.erb` layout handles full page updates via Turbo Stream
+
+## Development Workflow
+
+- Use `yarn dev` to start the development server
+- Use `bin/setup` for initial project setup
+- Configuration files: `shopify.app.toml` (development) and `shopify.app.production.toml` (production)
+- Web server config: `shopify.web.toml` (defines roles and dev command)
+- Database migrations: `bin/rails db:migrate`
+- Run tests: `bundle exec rspec` (RSpec) or `bin/rails test:all` (legacy Minitest)
