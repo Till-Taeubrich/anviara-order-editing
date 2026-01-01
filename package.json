@@ -14,6 +14,8 @@
   },
   "scripts": {
     "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=assets",
+    "sync": "git fetch --all && git merge template/main --allow-unrelated-histories",
+    "sync:setup": "git remote add template git@github.com:Till-Taeubrich/shopify-app-rails-hotwire-template.git",
     "shopify": "shopify",
     "dev": "shopify app dev",
     "info": "shopify app info",
