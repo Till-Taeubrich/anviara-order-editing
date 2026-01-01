@@ -1,5 +1,5 @@
 ---
-description: 37signals guidance on “vanilla Rails”: controllers can call domain models directly; avoid dogmatic application-layer isolation.
+description: 37signals guidance on "vanilla Rails": controllers can call domain models directly; avoid dogmatic application-layer isolation.
 alwaysApply: false
 ---
 # 37signals: Vanilla Rails is plenty
@@ -8,30 +8,90 @@ Reference index: `.cursor/rules/37signals-style-rails-index.mdc`
 
 ## Architectural / design rules
 
-- **Don’t default to an extra “application layer”**:
-  - 37signals does not separate “application vs domain” artifacts as a rule; they prefer domain objects with public APIs invoked from boundaries.
+- **Don't default to an extra "application layer"**:
+  - 37signals does not separate "application vs domain" artifacts as a rule; they prefer domain objects with public APIs invoked from boundaries.
+
 - **Controllers can access domain models directly**:
   - Plain CRUD from controllers is fine for simple scenarios.
   - For non-trivial actions, controllers should invoke **explicit domain methods** (the model is your application API).
+
 - **Prefer rich domain models over anemic ones**:
   - Business logic should live in domain objects, not in orchestration-only layers that just shuttle data around.
-- **Avoid “fat model” failure modes with two tactics**:
+
+- **Avoid "fat model" failure modes with two tactics**:
   - Use concerns to organize cohesive traits.
   - Delegate heavy work to subsystems of POROs (composition/inheritance/patterns), hidden behind the domain API.
-- **SRP: prefer “facade surface, small internals” over “monolith”**:
+
+  ```ruby
+  # The Recording model stays clean by including cohesive concerns
+  class Recording < ApplicationRecord
+    include Incineratable, Copyable
+  end
+
+  # The concern provides the public API...
+  module Recording::Incineratable
+    def incinerate
+      Incineration.new(self).run  # ...but delegates to a PORO for heavy work
+    end
+  end
+
+  module Recording::Copyable
+    extend ActiveSupport::Concern
+
+    included do
+      has_many :copies, foreign_key: :source_recording_id
+    end
+
+    def copy_to(bucket, parent: nil)
+      copies.create!(destination_bucket: bucket, destination_parent: parent)
+    end
+  end
+  ```
+
+- **SRP: prefer "facade surface, small internals" over "monolith"**:
   - A broad public API can be fine if the class mostly delegates and the complexity lives in cohesive helper objects; SRP concerns are more about implementation-level bloat than interface-level breadth.
-- **Be careful with “service” as a dogmatic default**:
-  - Encapsulated operations exist, but not as a mandated architectural layer with a uniform “verb service” shape.
+
+  ```ruby
+  class Account < ApplicationRecord
+    include Closable
+  end
+
+  # The concern exposes a simple public method...
+  module Account::Closable
+    def terminate
+      purge_or_incinerate if terminable?
+    end
+
+    private
+
+    # ...but delegates to dedicated POROs for the heavy lifting
+    def purge_or_incinerate
+      eligible_for_purge? ? purge : incinerate
+    end
+
+    def purge
+      Account::Closing::Purging.new(self).run
+    end
+
+    def incinerate
+      Account::Closing::Incineration.new(self).run
+    end
+  end
+  ```
+
+- **Be careful with "service" as a dogmatic default**:
+  - Encapsulated operations exist, but not as a mandated architectural layer with a uniform "verb service" shape.
+
 - **Beware isolated application-layer dogmatism**:
   - It often yields boilerplate delegators and pushes business rules out of the domain model, producing anemic models.
+
 - **No One Paradigm**:
-  - Treat architecture as tradeoffs; avoid translating patterns into rigid rules that fight Rails’ strengths.
+  - Treat architecture as tradeoffs; avoid translating patterns into rigid rules that fight Rails' strengths.
 
 ## Default stance in this codebase
 
-When the user says **“37signals style rails”**, these rules apply (see `.cursor/rules/37signals-style-rails-index.mdc`).
+When the user says **"37signals style rails"**, these rules apply (see `.cursor/rules/37signals-style-rails-index.mdc`).
 
 ## Source
 
 `https://dev.37signals.com/vanilla-rails-is-plenty/`
-
