@@ -1,6 +1,5 @@
 ---
 description: Write Shopify GraphQL queries/mutations using the shopify_graphql gem conventions (Query/Mutation wrapper classes, execute/handle_user_errors, pagination).
-globs: app/graphql/**/*.rb
 alwaysApply: false
 ---
 # Shopify GraphQL conventions
