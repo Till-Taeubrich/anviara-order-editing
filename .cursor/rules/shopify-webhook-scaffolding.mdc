@@ -18,18 +18,15 @@ bin/rails g shopify_app:add_declarative_webhook --topic products/update --path w
 
 ### Conventions
 
-- **`--topic`**: use Shopify’s canonical topic format (`products/update`, `orders/create`, etc.).
+- **`--topic`**: use Shopify's canonical topic format (`products/update`, `orders/create`, etc.).
+  - **For available topics**: See [shopify-webhook-topics.mdc](mdc:.cursor/rules/shopify-webhook-topics.mdc) - always research the official [Shopify webhook topics documentation](https://shopify.dev/docs/api/webhooks/latest#list-of-topics) when questions about available topics arise.
 - **`--path`**: keep it under `webhooks/...` and use **snake_case** for the leaf path.
   - Example: `webhooks/products_update`
-  - Resulting URL should live under this app’s API scope: **`/api/webhooks/...`**
+  - Resulting URL should live under this app's API scope: **`/api/webhooks/...`**
 
-## After scaffolding: wire it into routes (if needed)
+## After scaffolding
 
-This repo already reserves a namespace for webhook routes:
-
-- `config/routes.rb` → `scope path: :api, format: :json do ... namespace :webhooks do ... end end`
-
-If the generator didn’t add a route automatically, add the route **inside that namespace** (don’t create ad-hoc top-level routes).
+The generator automatically adds the route to `config/routes.rb` under the `/api/webhooks/...` namespace. **Do not make any automatic changes after scaffolding** - only suggest to the user what implementation steps they may need to take next (e.g., implementing the controller action logic).
 
 ## Implementation guidelines
 
