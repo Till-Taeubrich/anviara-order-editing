@@ -1,0 +1,83 @@
+<%= polaris_page(title: "Page can be ignored - just some pre-built components for development") do %>
+  <%= polaris_card(title: "Button sample") do %>
+    <%= polaris_stack do |stack| %>
+      <% stack.with_item do %>
+        <%= polaris_button(url: products_path) { "Products list" } %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= polaris_card(title: "Form sample") do %>
+    <%= form_tag messages_path do %>
+      <%= polaris_form_layout do |form_layout| %>
+        <% form_layout.with_item do %>
+          <%= polaris_text_field(name: :message, label: "Flash message") %>
+        <% end %>
+        <% form_layout.with_item do %>
+          <%= polaris_button(primary: true, submit: true) { "Send" } %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= polaris_card(
+    title: "Frontend request",
+    data: {
+      controller: "frontend-request",
+      frontend_request_url_value: frontend_request_path
+    }
+  ) do %>
+    <%= polaris_text_container(spacing: :tight) do %>
+      <p>Making a request from stimulus controller to the backend and display the response.</p>
+      <%= polaris_button(url: "#", data: {action: "frontend-request#makeRequest"}) { "Make frontend request" } %>
+    <% end %>
+  <% end %>
+
+  <%= render "modals" %>
+
+  <%= polaris_card(title: "Resource pickers") do %>
+    <%= polaris_stack do |stack| %>
+      <% stack.with_item do %>
+        <%= polaris_button(
+          data: {
+            controller: "resource-picker",
+            action: "resource-picker#open",
+            resource_picker_type_value: "product"
+          }
+        ) { "Product picker" } %>
+      <% end %>
+      <% stack.with_item do %>
+        <%= polaris_button(
+          data: {
+            controller: "resource-picker",
+            action: "resource-picker#open",
+            resource_picker_type_value: "variant"
+          }
+        ) { "Variant picker" } %>
+      <% end %>
+      <% stack.with_item do %>
+        <%= polaris_button(
+          data: {
+            controller: "resource-picker",
+            action: "resource-picker#open",
+            resource_picker_type_value: "collection"
+          }
+        ) { "Collection picker" } %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= polaris_card(title: "Navigation") do %>
+    <%= polaris_stack do |stack| %>
+      <% stack.with_item do %>
+        <%= polaris_button(url: new_redirect_path) { "Fullpage redirect" } %>
+      <% end %>
+      <% stack.with_item do %>
+        <%= polaris_button(url: "shopify:admin/orders", target: "_top") { "Admin page" } %>
+      <% end %>
+      <% stack.with_item do %>
+        <%= polaris_button(url: "https://shopify.dev", target: "_blank") { "External page" } %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

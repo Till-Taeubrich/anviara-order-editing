@@ -1,0 +1,49 @@
+---
+description: Research Shopify webhook topics from official documentation when questions about available webhook topics arise.
+alwaysApply: false
+---
+
+# Shopify webhook topics reference
+
+When questions arise about **available webhook topics**, **webhook topic names**, **webhook topic formats**, or **what webhook topics exist**, **always research** the official Shopify webhook topics documentation.
+
+## Research source
+
+**Primary reference**: [Shopify Webhooks API - List of topics](https://shopify.dev/docs/api/webhooks/latest#list-of-topics)
+
+This documentation contains the complete, up-to-date list of all available webhook topics that can be subscribed to.
+
+## When to use this rule
+
+Use this rule and research the documentation when:
+
+- User asks "what webhook topics are available?"
+- User asks "what's the topic name for [event]?"
+- User needs to know the canonical topic format (e.g., `products/update`, `orders/create`)
+- User is unsure about topic naming conventions
+- User wants to know if a specific webhook topic exists
+- User asks about webhook topic structure or format
+
+## Research approach
+
+1. **Search the web** for the latest Shopify webhook topics documentation
+2. **Reference the official documentation** at `https://shopify.dev/docs/api/webhooks/latest#list-of-topics`
+3. **Provide accurate topic names** in the canonical format (e.g., `products/update`, not `product/update`)
+4. **Cite the documentation** when providing topic information
+
+## Topic format conventions
+
+Webhook topics follow the pattern: `{resource}/{action}` format:
+
+- `products/update` - Product updated
+- `products/create` - Product created
+- `products/delete` - Product deleted
+- `orders/create` - Order created
+- `customers/update` - Customer updated
+- etc.
+
+Always use the exact topic format as documented in the official Shopify API documentation.
+
+## Related rules
+
+- See [shopify-webhook-scaffolding.mdc](mdc:.cursor/rules/shopify-webhook-scaffolding.mdc) for how to scaffold webhook handlers using these topics.

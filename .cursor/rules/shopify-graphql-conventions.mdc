@@ -1,0 +1,120 @@
+---
+description: Write Shopify GraphQL queries/mutations using the shopify_graphql gem conventions (Query/Mutation wrapper classes, execute/handle_user_errors, pagination).
+alwaysApply: false
+---
+# Shopify GraphQL conventions
+
+When generating Shopify GraphQL code in this repo (anything under `app/graphql/`), **always follow the patterns from the `shopify_graphql` gem README**:
+
+- Repo: `https://github.com/kirillplatonov/shopify_graphql`
+- README: `https://github.com/kirillplatonov/shopify_graphql/blob/main/README.md`
+
+## Default: wrapper classes (preferred)
+
+- **Queries**: `include ShopifyGraphql::Query`
+- **Mutations**: `include ShopifyGraphql::Mutation`
+- **GraphQL strings**: define as constants `QUERY` / `MUTATION` using `<<~GRAPHQL` heredocs.
+- **Entrypoint**: implement `def call(...)` and return the `response` object from `execute`.
+- **Response shaping**: set `response.data = ...` to a clean, app-appropriate shape (often nodes or value objects), then return `response`.
+
+### Query example (good)
+
+```ruby
+class GetProducts
+  include ShopifyGraphql::Query
+
+  QUERY = <<~GRAPHQL
+    query {
+      products(first: 10) {
+        edges { node { id title } }
+      }
+    }
+  GRAPHQL
+
+  def call
+    response = execute(QUERY)
+    response.data = response.data.products.edges.map(&:node)
+    response
+  end
+end
+```
+
+### Mutation example (good)
+
+```ruby
+class UpdateProduct
+  include ShopifyGraphql::Mutation
+
+  MUTATION = <<~GRAPHQL
+    mutation($input: ProductInput!) {
+      productUpdate(input: $input) {
+        product { id title }
+        userErrors { field message }
+      }
+    }
+  GRAPHQL
+
+  def call(input:)
+    response = execute(MUTATION, input: input)
+    response.data = response.data.productUpdate
+    handle_user_errors(response.data)
+    response
+  end
+end
+```
+
+## Pagination (cursor-based)
+
+If a query uses connections (`edges`, `pageInfo`), implement cursor pagination in `call`:
+
+- Start with `response = execute(QUERY, cursor: nil)` (or omit `cursor`).
+- While `response.data.<connection>.pageInfo.hasNextPage`:
+  - execute again with `cursor: ...pageInfo.endCursor`
+  - append parsed results
+- Assign the aggregated result back to `response.data` before returning.
+
+Example pattern:
+
+```ruby
+def call
+  response = execute(QUERY)
+  data = parse_data(response.data.collections.edges)
+
+  while response.data.collections.pageInfo.hasNextPage
+    response = execute(QUERY, cursor: response.data.collections.pageInfo.endCursor)
+    data += parse_data(response.data.collections.edges)
+  end
+
+  response.data = data
+  response
+end
+```
+
+## Error handling (mutations)
+
+If a mutation returns `userErrors`, **always** call `handle_user_errors(...)` on the mutation payload (the object containing `userErrors`).
+
+## Session usage (call-site convention)
+
+Call GraphQL wrappers inside a Shopify session block (typical controller usage):
+
+```ruby
+current_shop.with_shopify_session do
+  GetProducts.call.data
+end
+```
+
+## Escape hatch: direct execution (use sparingly)
+
+Only if a wrapper class is unnecessary, you may call `ShopifyGraphql.execute(...)` directly. If the response contains `userErrors`, call `ShopifyGraphql.handle_user_errors(...)`.
+
+```ruby
+response = ShopifyGraphql.execute(MUTATION, input: input)
+payload = response.data.productUpdate
+ShopifyGraphql.handle_user_errors(payload)
+```
+
+## Avoid
+
+- Don’t use `ShopifyAPI::Clients::Graphql` directly in this repo’s `app/graphql/` layer.
+- Don’t return raw `edges` trees from wrappers unless the caller explicitly needs the connection structure.
