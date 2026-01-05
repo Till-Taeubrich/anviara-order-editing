@@ -6,7 +6,7 @@
     "@hotwired/turbo-rails": "^8.0.12",
     "@rails/request.js": "^0.0.9",
     "@shopify/app": "^3.58.2",
-    "@shopify/cli": "^3.71.4",
+    "@shopify/cli": "^3.84.1",
     "debounce": "^2.2.0",
     "dotenv": "^16.4.7",
     "esbuild": "^0.24.0",
