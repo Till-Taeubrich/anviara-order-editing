@@ -45,3 +45,4 @@ yarn-debug.log*
 shopify.app.*toml
 
 .cursor/plans/
+/config/credentials/production.key
