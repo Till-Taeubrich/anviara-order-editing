@@ -46,3 +46,4 @@ shopify.app.*toml
 
 .cursor/plans/
 /config/credentials/production.key
+/config/credentials/database.url
