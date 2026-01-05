@@ -46,4 +46,5 @@ shopify.app.*toml
 
 .cursor/plans/
 /config/credentials/production.key
+/config/credentials/kamal_registry_password.key
 /config/credentials/database.url
