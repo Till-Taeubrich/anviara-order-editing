@@ -49,6 +49,9 @@ env:
     # Host for Shopify app - must match the domain in shopify.app.toml
     HOST: https://orderediting.anviara.com
 
+    # Let Rails serve static files (Cloudflare will cache them)
+    RAILS_SERVE_STATIC_FILES: true
+
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
     # When you start using multiple servers, you should split out job processing to a dedicated machine.
     SOLID_QUEUE_IN_PUMA: true
