@@ -20,8 +20,10 @@ servers:
 #
 # Don't use this when deploying to multiple web servers (then you have to terminate SSL at your load balancer).
 #
+# Note: When using Cloudflare proxy, you can disable ssl here and let Cloudflare handle SSL termination.
+# Set Cloudflare SSL/TLS mode to "Flexible" (HTTP to origin) or "Full" (HTTPS to origin with valid cert).
 proxy:
-  ssl: true
+  ssl: false
   host: orderediting.anviara.com
 
 # Where you keep your container images.
@@ -44,6 +46,9 @@ env:
     - SHOPIFY_API_KEY
     - SHOPIFY_API_SECRET
   clear:
+    # Host for Shopify app - must match the domain in shopify.app.toml
+    HOST: https://orderediting.anviara.com
+
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
     # When you start using multiple servers, you should split out job processing to a dedicated machine.
     SOLID_QUEUE_IN_PUMA: true
