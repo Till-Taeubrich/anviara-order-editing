@@ -2,7 +2,7 @@
 service: shopify_hotwire_template
 
 # Name of the container image (use your-user/app-name on external registries).
-image: shopify_hotwire_template
+image: taeubrich/shopify_hotwire_template
 
 # Deploy to these servers.
 servers:
@@ -20,27 +20,37 @@ servers:
 #
 # Don't use this when deploying to multiple web servers (then you have to terminate SSL at your load balancer).
 #
-# proxy:
+proxy:
 #   ssl: true
-#   host: app.example.com
+  host: shopify_hotwire_template.anviara.com
 
 # Where you keep your container images.
 registry:
   # Alternatives: hub.docker.com / registry.digitalocean.com / ghcr.io / ...
-  server: localhost:5555
+  server: docker.io
 
   # Needed for authenticated registries.
-  # username: your-user
+  username: taeubrichtill
 
   # Always use an access token rather than real password when possible.
-  # password:
-  #   - KAMAL_REGISTRY_PASSWORD
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+    - DATABASE_URL
+    - SHOPIFY_API_KEY
+    - SHOPIFY_API_SECRET
 
 # Inject ENV variables into containers (secrets come from .kamal/secrets).
 env:
   secret:
     - RAILS_MASTER_KEY
   clear:
+    
+    # Host for Shopify app - must match the domain in shopify.app.toml
+    HOST: https://orderediting.anviara.com
+
+    # Let Rails serve static files (Cloudflare will cache them)
+    RAILS_SERVE_STATIC_FILES: true
+
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
     # When you start using multiple servers, you should split out job processing to a dedicated machine.
     SOLID_QUEUE_IN_PUMA: true

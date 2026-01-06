@@ -45,3 +45,8 @@ yarn-debug.log*
 shopify.app.*toml
 
 .cursor/plans/
+/config/credentials/production.key
+/config/credentials/kamal_registry_password.key
+/config/credentials/database.url
+/config/credentials/shopify_api_key.key
+/config/credentials/shopify_api_secret.key

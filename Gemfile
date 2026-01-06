@@ -13,6 +13,10 @@ gem "pg", "~> 1.1"
 gem "puma", "~> 6.0"
 gem "rails", "~> 8.0.0"
 gem "redis", "~> 5.0"
+gem "solid_cache"
+gem "solid_cable"
+gem "solid_queue"
+gem "thruster"
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # shopify

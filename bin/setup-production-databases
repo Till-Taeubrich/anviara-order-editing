@@ -1,0 +1,78 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# bin/setup-production-databases
+
+require "uri"
+require "pg"
+
+# Read DATABASE_URL from credentials
+database_url = File.read("config/credentials/database.url").strip
+uri = URI.parse(database_url)
+
+# Extract base database name
+base_db_name = uri.path.gsub(%r{^/}, "").split("?").first
+
+puts "Base database: #{base_db_name}"
+puts "Creating additional databases..."
+
+# Connect to PostgreSQL server
+# Try connecting to the default database first (DigitalOcean managed DBs may not have 'postgres')
+admin_uri = uri.dup
+admin_db_name = base_db_name
+
+begin
+  # Try connecting to the default database first
+  conn = PG.connect(
+    host: admin_uri.host,
+    port: admin_uri.port,
+    user: admin_uri.user,
+    password: admin_uri.password,
+    dbname: admin_db_name,
+    sslmode: "require",
+  )
+rescue PG::ConnectionBad => e
+  # If that fails, try 'postgres' database
+  puts "Could not connect to #{admin_db_name}, trying 'postgres' database..."
+  admin_db_name = "postgres"
+  conn = PG.connect(
+    host: admin_uri.host,
+    port: admin_uri.port,
+    user: admin_uri.user,
+    password: admin_uri.password,
+    dbname: admin_db_name,
+    sslmode: "require",
+  )
+end
+
+begin
+  # Create databases
+  ["_cache", "_queue", "_cable"].each do |suffix|
+    db_name = "#{base_db_name}#{suffix}"
+    puts "Creating database: #{db_name}"
+
+    begin
+      conn.exec("CREATE DATABASE \"#{db_name}\";")
+      puts "  ✓ Created #{db_name}"
+    rescue PG::DuplicateDatabase => e
+      puts "  ⚠ Database #{db_name} already exists"
+    rescue => e
+      puts "  ✗ Error creating #{db_name}: #{e.message}"
+    end
+  end
+
+  conn.close
+
+  puts "\nDone! Databases ready:"
+  puts "  - #{base_db_name}"
+  puts "  - #{base_db_name}_cache"
+  puts "  - #{base_db_name}_queue"
+  puts "  - #{base_db_name}_cable"
+rescue PG::ConnectionBad => e
+  puts "Error connecting to database: #{e.message}"
+  puts "\nMake sure:"
+  puts "  1. Your DATABASE_URL is correct in config/credentials/database.url"
+  puts "  2. Your IP is whitelisted in DigitalOcean database firewall"
+  puts "  3. You have permission to create databases"
+  exit(1)
+end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SubscriptionsController < AuthenticatedController
-  skip_before_action :check_subscription
+  # skip_before_action :check_subscription
 
   def new
     subscription = current_shop.with_shopify_session do

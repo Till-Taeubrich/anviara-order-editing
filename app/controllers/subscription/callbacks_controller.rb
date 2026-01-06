@@ -2,7 +2,7 @@
 
 module Subscription
   class CallbacksController < AuthenticatedController
-    skip_before_action :check_subscription
+    # skip_before_action :check_subscription
 
     def show
       subscription_gid = "gid://shopify/AppSubscription/#{params[:charge_id]}"

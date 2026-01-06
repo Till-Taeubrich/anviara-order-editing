@@ -3,6 +3,8 @@
 Rails.application.routes.draw do
   root to: "home#index"
 
+  get "/up", to: "rails/health#show", as: :rails_health_check
+
   get "/home", to: "home#index"
 
   resources :products, only: [:index]
