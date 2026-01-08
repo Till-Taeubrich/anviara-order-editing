@@ -21,7 +21,7 @@ gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # shopify
 gem "polaris_view_components", "~> 2.0"
-gem "shopify_app", "~> 22.5.0"
+gem "shopify_app", "~> 23.0"
 gem "shopify_graphql", "~> 2.0"
 
 # frontend
