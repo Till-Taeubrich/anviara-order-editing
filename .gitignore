@@ -52,3 +52,4 @@ shopify.app.*toml
 /config/credentials/shopify_api_secret.key
 
 order_editing_mvp_plan.plan.md
+notes.txt
