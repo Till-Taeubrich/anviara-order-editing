@@ -1,0 +1,10 @@
+{
+  "fulfillmentOrder": {
+    "id": "gid://shopify/FulfillmentOrder/12825860538527",
+    "status": "ON_HOLD",
+    "order": {
+      "id": "gid://shopify/Order/11889603969183"
+    }
+  },
+  "userErrors": []
+}
