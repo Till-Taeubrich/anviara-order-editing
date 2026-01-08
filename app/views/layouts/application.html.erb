@@ -9,6 +9,7 @@
     <title><%= ShopifyApp.configuration.application_name %></title>
 
     <%= javascript_include_tag "application" %>
+    <%= Sentry.get_trace_propagation_meta.html_safe %>
   </head>
 
   <body>
