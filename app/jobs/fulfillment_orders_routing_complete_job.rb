@@ -3,9 +3,13 @@
 class FulfillmentOrdersRoutingCompleteJob < ApplicationJob
   def perform(shop_domain:, webhook:)
     shop = Shop.find_by!(shopify_domain: shop_domain)
+    fulfillment_order_id = webhook.dig("fulfillment_order", "id")
 
-    puts("[FulfillmentOrdersRoutingComplete] Webhook received for #{webhook.to_json}")
+    shop.with_shopify_session do
+      result = HoldFulfillmentOrder.call(fulfillment_order_id: fulfillment_order_id)
 
-    # TODO: Implement actual fulfillment order handling
+      puts("[FulfillmentOrdersRoutingComplete] Fulfillment order held for #{result.data}")
+      puts("[FulfillmentOrdersRoutingComplete] Fulfillment order held for #{result.data.fulfillmentOrder.id}")
+    end
   end
 end
