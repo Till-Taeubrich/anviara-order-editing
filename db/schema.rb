@@ -10,9 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_06_24_105335) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_08_221544) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "fulfillment_orders", force: :cascade do |t|
+    t.string "shopify_id", null: false
+    t.string "status", null: false
+    t.bigint "shop_id", null: false
+    t.bigint "order_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_fulfillment_orders_on_order_id"
+    t.index ["shop_id"], name: "index_fulfillment_orders_on_shop_id"
+    t.index ["shopify_id"], name: "index_fulfillment_orders_on_shopify_id", unique: true
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.string "shopify_id", null: false
+    t.bigint "shop_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["shop_id"], name: "index_orders_on_shop_id"
+    t.index ["shopify_id"], name: "index_orders_on_shopify_id", unique: true
+  end
 
   create_table "sessions", force: :cascade do |t|
     t.string "session_id", null: false
@@ -32,4 +53,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_06_24_105335) do
     t.boolean "subscription_active", default: false, null: false
     t.index ["shopify_domain"], name: "index_shops_on_shopify_domain", unique: true
   end
+
+  add_foreign_key "fulfillment_orders", "orders"
+  add_foreign_key "fulfillment_orders", "shops"
+  add_foreign_key "orders", "shops"
 end
