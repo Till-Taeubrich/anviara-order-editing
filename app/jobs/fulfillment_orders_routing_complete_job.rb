@@ -2,14 +2,10 @@
 
 class FulfillmentOrdersRoutingCompleteJob < ApplicationJob
   def perform(shop_domain:, webhook:)
-    shop = Shop.find_by(shopify_domain: shop_domain)
+    shop = Shop.find_by!(shopify_domain: shop_domain)
 
-    if shop.nil?
-      logger.error("#{self.class} failed: cannot find shop with domain '#{shop_domain}'")
+    puts("[FulfillmentOrdersRoutingComplete] Webhook received for #{webhook.to_json}")
 
-      raise ActiveRecord::RecordNotFound, "Shop Not Found"
-    end
-
-    puts "[FulfillmentOrdersRoutingComplete] Webhook payload: #{webhook.to_json}"
+    # TODO: Implement actual fulfillment order handling
   end
 end
