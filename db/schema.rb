@@ -15,22 +15,22 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_08_221544) do
   enable_extension "pg_catalog.plpgsql"
 
   create_table "fulfillment_orders", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "shopify_id", null: false
     t.string "status", null: false
     t.bigint "shop_id", null: false
     t.bigint "order_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.index ["order_id"], name: "index_fulfillment_orders_on_order_id"
     t.index ["shop_id"], name: "index_fulfillment_orders_on_shop_id"
     t.index ["shopify_id"], name: "index_fulfillment_orders_on_shopify_id", unique: true
   end
 
   create_table "orders", force: :cascade do |t|
-    t.string "shopify_id", null: false
-    t.bigint "shop_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "shopify_id", null: false
+    t.bigint "shop_id", null: false
     t.index ["shop_id"], name: "index_orders_on_shop_id"
     t.index ["shopify_id"], name: "index_orders_on_shopify_id", unique: true
   end
