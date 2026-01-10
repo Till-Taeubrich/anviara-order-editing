@@ -8,7 +8,7 @@ class FulfillmentOrder < ApplicationRecord
   validates :status, presence: true
 
   def self.from_shopify(shop, payload)
-    if shop.should_hold_fulfillment_orders?
+    if shop.should_hold_fulfillment_order?
       hold_immediately_and_persist(shop, payload)
     else
       FulfillmentOrderPersistJob.perform_later(shop_id: shop.id, payload:)
