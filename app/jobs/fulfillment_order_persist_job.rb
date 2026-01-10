@@ -3,6 +3,9 @@
 class FulfillmentOrderPersistJob < ApplicationJob
   queue_as :default
 
+  retry_on ShopifyGraphql::TooManyRequests, wait: :polynomially_longer, attempts: 5
+  retry_on ShopifyGraphql::ServerError, wait: :polynomially_longer, attempts: 5
+
   def perform(shop_id:, payload:)
     shop = Shop.find(shop_id)
 
