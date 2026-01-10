@@ -29,6 +29,9 @@ class FulfillmentOrder < ApplicationRecord
 
   private_class_method def self.persist(shop, shopify_id, order_shopify_id, status)
     order = shop.orders.find_or_create_by!(shopify_id: order_shopify_id)
-    shop.fulfillment_orders.create!(shopify_id:, order:, status:)
+    shop.fulfillment_orders.find_or_create_by!(shopify_id:) do |fo|
+      fo.order = order
+      fo.status = status
+    end
   end
 end
