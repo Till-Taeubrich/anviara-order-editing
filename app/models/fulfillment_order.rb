@@ -19,7 +19,8 @@ class FulfillmentOrder < ApplicationRecord
 
   private_class_method def self.hold_immediately_and_persist(shop, payload)
     data = HoldFulfillmentOrder.call(fulfillment_order_id: payload["id"]).data.fulfillmentOrder
-    persist(shop, payload["id"], data.order.id, data.status)
+    record = persist(shop, payload["id"], data.order.id, data.status, held_at: Time.current)
+    ReleaseFulfillmentOrderHoldJob.set(wait: 30.minutes).perform_later(fulfillment_order_id: record.id)
   end
 
   def self.persist_from_shopify(shop, payload)
@@ -27,11 +28,12 @@ class FulfillmentOrder < ApplicationRecord
     persist(shop, payload["id"], data.order.id, data.status)
   end
 
-  private_class_method def self.persist(shop, shopify_id, order_shopify_id, status)
+  private_class_method def self.persist(shop, shopify_id, order_shopify_id, status, held_at: nil)
     order = shop.orders.find_or_create_by!(shopify_id: order_shopify_id)
     shop.fulfillment_orders.find_or_create_by!(shopify_id:) do |fo|
       fo.order = order
       fo.status = status
+      fo.held_at = held_at
     end
   end
 end
