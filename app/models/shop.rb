@@ -17,4 +17,8 @@ class Shop < ActiveRecord::Base
   def admin_url(path = nil)
     "https://admin.shopify.com/store/#{shop_handle}#{path}"
   end
+
+  def should_hold_fulfillment_orders?
+    true # TODO: implement time window logic
+  end
 end
