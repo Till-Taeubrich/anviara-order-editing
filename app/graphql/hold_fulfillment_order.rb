@@ -16,14 +16,15 @@ class HoldFulfillmentOrder
   GRAPHQL
 
   def call(fulfillment_order_id:)
-    response = execute(MUTATION,
+    response = execute(
+      MUTATION,
       id: fulfillment_order_id,
       fulfillmentHold: {
         reason: "OTHER",
         reasonNotes: "Held for order editing window",
         notifyMerchant: false,
-        handle: "order-editing-window"
-      }
+        handle: "order-editing-window",
+      },
     )
     response.data = response.data.fulfillmentOrderHold
     handle_user_errors(response.data)
