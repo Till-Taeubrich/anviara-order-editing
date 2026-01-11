@@ -7,6 +7,7 @@ class GetFulfillmentOrder
     query fulfillmentOrder($id: ID!) {
       fulfillmentOrder(id: $id) {
         status
+        createdAt
         order { id }
       }
     }

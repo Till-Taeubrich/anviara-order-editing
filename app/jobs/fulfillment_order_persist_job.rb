@@ -10,7 +10,7 @@ class FulfillmentOrderPersistJob < ApplicationJob
     shop = Shop.find(shop_id)
 
     shop.with_shopify_session do
-      FulfillmentOrder.persist_from_shopify(shop, payload)
+      FulfillmentOrder.persist_from_shopify!(shop, payload)
     end
   end
 end
