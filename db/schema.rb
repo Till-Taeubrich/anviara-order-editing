@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_11_000109) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_11_001518) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -32,6 +32,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_11_000109) do
     t.datetime "updated_at", null: false
     t.string "shopify_id", null: false
     t.bigint "shop_id", null: false
+    t.datetime "shopify_created_at"
     t.index ["shop_id"], name: "index_orders_on_shop_id"
     t.index ["shopify_id"], name: "index_orders_on_shopify_id", unique: true
   end
