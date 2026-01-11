@@ -50,7 +50,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_11_173427) do
     t.bigint "shop_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "hold_duration_minutes"
+    t.integer "hold_duration_minutes", default: 30, null: false
     t.index ["shop_id"], name: "index_settings_on_shop_id", unique: true
   end
 
