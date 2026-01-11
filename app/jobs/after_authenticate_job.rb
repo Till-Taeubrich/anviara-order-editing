@@ -4,7 +4,8 @@ class AfterAuthenticateJob < ApplicationJob
   queue_as :default
 
   def perform(shop_domain:)
-    Shop.find_by!(shopify_domain: shop_domain)
+    shop = Shop.find_by!(shopify_domain: shop_domain)
+    shop.setup!
 
     # Perform any important work after app install/re-install
     #

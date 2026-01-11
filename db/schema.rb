@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_10_213851) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_11_000109) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -45,6 +45,13 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_10_213851) do
     t.index ["updated_at"], name: "index_sessions_on_updated_at"
   end
 
+  create_table "settings", force: :cascade do |t|
+    t.bigint "shop_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["shop_id"], name: "index_settings_on_shop_id", unique: true
+  end
+
   create_table "shops", force: :cascade do |t|
     t.string "shopify_domain", null: false
     t.string "shopify_token", null: false
@@ -58,4 +65,5 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_10_213851) do
   add_foreign_key "fulfillment_orders", "orders"
   add_foreign_key "fulfillment_orders", "shops"
   add_foreign_key "orders", "shops"
+  add_foreign_key "settings", "shops"
 end

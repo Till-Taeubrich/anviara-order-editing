@@ -5,6 +5,11 @@ class Shop < ActiveRecord::Base
 
   has_many :orders, dependent: :destroy
   has_many :fulfillment_orders, dependent: :destroy
+  has_one :settings, dependent: :destroy
+
+  def setup!
+    settings || create_settings!
+  end
 
   def api_version
     ShopifyApp.configuration.api_version
