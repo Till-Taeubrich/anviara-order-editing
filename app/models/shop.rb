@@ -24,6 +24,6 @@ class Shop < ActiveRecord::Base
   end
 
   def should_hold_fulfillment_order?
-    true # TODO: implement time window logic
+    true # TODO: implement time window logic for same day delivery support
   end
 end
