@@ -19,28 +19,29 @@ class FulfillmentOrder < ApplicationRecord
 
   private_class_method def self.hold_immediately_and_persist!(shop, payload)
     data = HoldFulfillmentOrder.call(fulfillment_order_id: payload["id"]).data.fulfillmentOrder
-    shopify_created_at = Time.parse(data.createdAt)
-    record = persist!(shop, payload["id"], data.order.id, data.status, held_at: Time.current, shopify_created_at:)
+    order_shopify_created_at = Time.parse(data.order.createdAt)
+    record = persist!(shop, payload["id"], data.order.id, data.status, order_shopify_created_at:, held_at: Time.current)
 
-    release_time = shopify_created_at + 30.minutes
+    release_time = order_shopify_created_at + shop.settings.hold_duration_minutes.minutes
     ReleaseFulfillmentOrderHoldJob.set(wait_until: release_time).perform_later(fulfillment_order_id: record.id)
   end
 
   def self.persist_from_shopify!(shop, payload)
     data = GetFulfillmentOrder.call(fulfillment_order_id: payload["id"]).data
-    shopify_created_at = Time.parse(data.createdAt)
-    persist!(shop, payload["id"], data.order.id, data.status, shopify_created_at:)
+    order_shopify_created_at = Time.parse(data.order.createdAt)
+    persist!(shop, payload["id"], data.order.id, data.status, order_shopify_created_at:)
   end
 
-  private_class_method def self.persist!(shop, shopify_id, order_shopify_id, status, held_at: nil,
-    shopify_created_at: nil)
-    order = shop.orders.find_or_create_by!(shopify_id: order_shopify_id)
-    record = shop.fulfillment_orders.find_or_initialize_by!(shopify_id:)
-    record.order = order
-    record.status = status
-    record.held_at = held_at if held_at
-    record.shopify_created_at = shopify_created_at if shopify_created_at
-    record.save!
-    record
+  private_class_method def self.persist!(shop, shopify_id, order_shopify_id, status, order_shopify_created_at: nil,
+    held_at: nil)
+    order = shop.orders.find_or_create_by!(shopify_id: order_shopify_id) do |o|
+      o.shopify_created_at = order_shopify_created_at if order_shopify_created_at
+    end
+
+    FulfillmentOrder.find_or_create_by!(shop: shop, shopify_id: shopify_id) do |record|
+      record.order = order
+      record.status = status
+      record.held_at = held_at
+    end
   end
 end

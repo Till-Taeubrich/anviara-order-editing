@@ -8,8 +8,7 @@ class HoldFulfillmentOrder
       fulfillmentOrderHold(id: $id, fulfillmentHold: $fulfillmentHold) {
         fulfillmentOrder {
           status
-          createdAt
-          order { id }
+          order { id createdAt }
         }
         userErrors { field message }
       }
