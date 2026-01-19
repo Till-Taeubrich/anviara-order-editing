@@ -1,3 +1,7 @@
+# Anviara Order Editing
+
+To run the app locally, run `bin/tunnel` in one terminal and `yarn dev` in another.
+
 # Shopify Hotwire Template
 
 Welcome to the new template for building Shopify apps with Hotwire. This repo is successor of [Shopify Hotwire Sample](https://github.com/kirillplatonov/shopify-hotwire-sample) but available only for my Github Sponsors. It's will be more frequently updated to keep up with Shopify changes.
