@@ -7,7 +7,7 @@
     "@preact/signals": "^2.3.x",
     "@rails/request.js": "^0.0.9",
     "@shopify/app": "^3.58.2",
-    "@shopify/cli": "^3.84.1",
+    "@shopify/cli": "^3.89.0",
     "@shopify/ui-extensions": "2025.10.x",
     "debounce": "^2.2.0",
     "dotenv": "^16.4.7",
