@@ -53,6 +53,7 @@ shopify.app.*toml
 
 order_editing_mvp_plan.plan.md
 notes.txt
+TODO
 
 # Cloudflare tunnel credentials (copy from ~/.cloudflared/<Tunnel-UUID>.json)
 .cloudflared/credentials.json
