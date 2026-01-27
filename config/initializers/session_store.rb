@@ -10,30 +10,26 @@ Rack::Session::Abstract::Persisted.class_eval do
   end
 end
 
-module ActionDispatch
-  module Session
-    class ShopifySessionStore < ActionDispatch::Session::ActiveRecordStore
-      def get_session_model(request, id)
-        logger.silence do
-          model = get_session_with_fallback(id)
-          unless model
-            shopify_session_id = request.env["shopify_session_id"]
-            if shopify_session_id && shopify_session_id == id.public_id
-              # Creating new session with Shopify session id
-            else
-              id = generate_sid
-            end
-            model = session_class.new(session_id: id.private_id, data: {})
-            model.save
-          end
-          if request.env[ENV_SESSION_OPTIONS_KEY][:id].nil?
-            request.env[SESSION_RECORD_KEY] = model
-          else
-            request.env[SESSION_RECORD_KEY] ||= model
-          end
-          [model, id]
+class ActionDispatch::Session::ShopifySessionStore < ActionDispatch::Session::ActiveRecordStore
+  def get_session_model(request, id)
+    logger.silence do
+      model = get_session_with_fallback(id)
+      unless model
+        shopify_session_id = request.env["shopify_session_id"]
+        if shopify_session_id && shopify_session_id == id.public_id
+          # Creating new session with Shopify session id
+        else
+          id = generate_sid
         end
+        model = session_class.new(session_id: id.private_id, data: {})
+        model.save
       end
+      if request.env[ENV_SESSION_OPTIONS_KEY][:id].nil?
+        request.env[SESSION_RECORD_KEY] = model
+      else
+        request.env[SESSION_RECORD_KEY] ||= model
+      end
+      [model, id]
     end
   end
 end

@@ -15,3 +15,6 @@ Style/ClassMethodsDefinitions:
 
 Style/ClassAndModuleChildren:
   EnforcedStyle: compact
+  Exclude:
+    - 'config/application.rb'
+    - 'app/controllers/api/**/*'
