@@ -17,7 +17,8 @@
 
   "errors": {
     "networkError": "Netzwerkfehler. Bitte versuchen Sie es erneut.",
-    "updateFailed": "Fehler beim Aktualisieren der Adresse"
+    "updateFailed": "Fehler beim Aktualisieren der Adresse",
+    "invalidZip": "Eine gültige Postleitzahl für Deutschland eingeben"
   },
 
   "editAddress": "Adresse bearbeiten"

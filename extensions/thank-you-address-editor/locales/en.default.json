@@ -17,7 +17,8 @@
 
   "errors": {
     "networkError": "Network error. Please try again.",
-    "updateFailed": "Failed to update address"
+    "updateFailed": "Failed to update address",
+    "invalidZip": "Enter a valid postal code for Germany"
   },
 
   "editAddress": "Edit address"

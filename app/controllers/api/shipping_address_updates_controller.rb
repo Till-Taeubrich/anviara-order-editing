@@ -15,7 +15,12 @@ module Api
         render(json: { success: true, statusPageUrl: result.status_page_url })
       else
         render(
-          json: { success: false, errors: result.errors, retryable: result.retryable },
+          json: {
+            success: false,
+            errors: result.errors,
+            retryable: result.retryable,
+            fieldErrors: result.field_errors,
+          },
           status: :unprocessable_entity,
         )
       end

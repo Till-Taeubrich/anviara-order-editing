@@ -55,6 +55,7 @@ function Modal() {
   const [originalAddress, setOriginalAddress] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [zipError, setZipError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [statusPageUrl, setStatusPageUrl] = useState(null);
 
@@ -103,6 +104,7 @@ function Modal() {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
+    setZipError(null);
 
     const maxRetryMs = 15000;
     const retryIntervalMs = 2000;
@@ -127,9 +129,17 @@ function Modal() {
         break;
       }
 
-      setError(
-        data.errors?.[0] || shopify.i18n.translate("errors.updateFailed"),
-      );
+      const hasZipError = data.fieldErrors?.includes("zip");
+      if (hasZipError) {
+        setZipError(shopify.i18n.translate("errors.invalidZip"));
+      }
+
+      const bannerError = data.errors?.[0];
+      if (bannerError) {
+        setError(bannerError);
+      } else if (!hasZipError) {
+        setError(shopify.i18n.translate("errors.updateFailed"));
+      }
     } catch {
       setError(shopify.i18n.translate("errors.networkError"));
     } finally {
@@ -142,6 +152,7 @@ function Modal() {
       ...prev,
       [name]: e.target?.value ?? e.detail?.value ?? "",
     }));
+    if (name === "zip") setZipError(null);
   };
 
   return (
@@ -163,6 +174,9 @@ function Modal() {
                         value={address[name] || ""}
                         onInput={updateField(name)}
                         disabled={isLoading || success}
+                        error={
+                          name === "zip" ? zipError || undefined : undefined
+                        }
                       />
                     </s-grid-item>
                   ))}
@@ -176,6 +190,9 @@ function Modal() {
                   value={address[row[0].name] || ""}
                   onInput={updateField(row[0].name)}
                   disabled={isLoading || success}
+                  error={
+                    row[0].name === "zip" ? zipError || undefined : undefined
+                  }
                 />
               </s-grid-item>
             ),
