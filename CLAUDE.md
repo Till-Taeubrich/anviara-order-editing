@@ -157,6 +157,4 @@ Usage: `Use the dhh-code-reviewer agent to review [files or changes]`
 
 Configured in `.claude/settings.json` and `.claude/hooks/`:
 
-- **PreToolUse hook** (`.claude/hooks/pre_tool_use.sh`): Blocks dangerous `rm -rf` commands and direct `.env` file access
-- **PostToolUse hook**: Auto-runs `rubocop -a` on Ruby files and `prettier` on JS/TS/JSON/ERB after edits
 - **Database safety rules** (`.claude/rules/database-safety.md`): Forbids destructive DB operations (`db:drop`, `db:reset`, `destroy_all`, etc.)
