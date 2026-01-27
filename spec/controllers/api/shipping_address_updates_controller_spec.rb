@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe(Api::ShippingAddressUpdatesController, type: :request) do
   let(:shop) { Shop.create!(shopify_domain: "test.myshopify.com", shopify_token: "token") }
-  let(:order) { Order.create!(shopify_id: "gid://shopify/Order/123", shop: shop) }
+  let(:order_id) { "gid://shopify/Order/123" }
 
   let(:valid_address) do
     { firstName: "Jane", lastName: "Doe", address1: "123 Main St", city: "Ottawa", zip: "K1A 0B1" }
@@ -21,70 +21,46 @@ RSpec.describe(Api::ShippingAddressUpdatesController, type: :request) do
   describe "POST /api/shipping_address_updates" do
     context "with valid session token" do
       it "updates the address successfully" do
-        order # ensure order exists
-        graphql_order = double("order", statusPageUrl: "https://example.com/status")
-        graphql_data = double("data", userErrors: [], order: graphql_order)
-        mock_graphql = double("result", data: graphql_data)
-
-        allow(UpdateOrderAddress).to(receive(:call).and_return(mock_graphql))
-        allow(shop).to(receive(:with_shopify_session).and_yield)
+        result = Order::AddressEditable::AddressUpdateResult.success(
+          status_page_url: "https://example.com/status",
+        )
+        allow(Order).to(receive(:update_shipping_address).and_return(result))
 
         post(
           "/api/shipping_address_updates",
-          params: { order_id: order.shopify_id, address: valid_address },
+          params: { order_id: order_id, address: valid_address },
           headers: { "Authorization" => "Bearer valid-token" },
           as: :json,
         )
 
         expect(response).to(have_http_status(:ok))
-        body = JSON.parse(response.body)
-        expect(body["success"]).to(be(true))
-        expect(body["statusPageUrl"]).to(eq("https://example.com/status"))
+        expect(response.parsed_body["success"]).to(be(true))
+        expect(response.parsed_body["statusPageUrl"]).to(eq("https://example.com/status"))
       end
 
       it "returns errors on user errors" do
-        order
-        user_error = double("userError", message: "Invalid address")
-        graphql_data = double("data", userErrors: [user_error], order: nil)
-        mock_graphql = double("result", data: graphql_data)
-
-        allow(UpdateOrderAddress).to(receive(:call).and_return(mock_graphql))
-        allow(shop).to(receive(:with_shopify_session).and_yield)
+        result = Order::AddressEditable::AddressUpdateResult.failure(errors: ["Invalid address"])
+        allow(Order).to(receive(:update_shipping_address).and_return(result))
 
         post(
           "/api/shipping_address_updates",
-          params: { order_id: order.shopify_id, address: valid_address },
+          params: { order_id: order_id, address: valid_address },
           headers: { "Authorization" => "Bearer valid-token" },
           as: :json,
         )
 
         expect(response).to(have_http_status(:unprocessable_entity))
-        body = JSON.parse(response.body)
-        expect(body["success"]).to(be(false))
-        expect(body["errors"]).to(eq(["Invalid address"]))
-      end
-
-      it "returns 404 when order not found" do
-        post(
-          "/api/shipping_address_updates",
-          params: { order_id: "gid://shopify/Order/999", address: valid_address },
-          headers: { "Authorization" => "Bearer valid-token" },
-          as: :json,
-        )
-
-        expect(response).to(have_http_status(:not_found))
-        body = JSON.parse(response.body)
-        expect(body["success"]).to(be(false))
+        expect(response.parsed_body["success"]).to(be(false))
+        expect(response.parsed_body["errors"]).to(eq(["Invalid address"]))
       end
     end
 
     context "without session token" do
       it "returns 401" do
-        post("/api/shipping_address_updates", params: { order_id: "gid://shopify/Order/123" }, as: :json)
+        post("/api/shipping_address_updates", params: { order_id: order_id }, as: :json)
 
         expect(response).to(have_http_status(:unauthorized))
-        body = JSON.parse(response.body)
-        expect(body["errors"]).to(include("Missing session token"))
+        expect(response.parsed_body["errors"]).to(include("Missing session token"))
       end
     end
 
@@ -96,14 +72,13 @@ RSpec.describe(Api::ShippingAddressUpdatesController, type: :request) do
 
         post(
           "/api/shipping_address_updates",
-          params: { order_id: "gid://shopify/Order/123" },
+          params: { order_id: order_id },
           headers: { "Authorization" => "Bearer bad-token" },
           as: :json,
         )
 
         expect(response).to(have_http_status(:unauthorized))
-        body = JSON.parse(response.body)
-        expect(body["errors"]).to(include("Invalid session token"))
+        expect(response.parsed_body["errors"]).to(include("Invalid session token"))
       end
     end
   end

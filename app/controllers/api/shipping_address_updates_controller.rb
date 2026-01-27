@@ -5,8 +5,11 @@ module Api
     skip_before_action :verify_session_token, only: :options
 
     def create
-      order = @current_shop.orders.find_by!(shopify_id: params[:order_id])
-      result = order.update_shipping_address(address: params[:address])
+      result = Order.update_shipping_address(
+        shop: @current_shop,
+        order_id: params[:order_id],
+        address: params[:address],
+      )
 
       if result.success
         render(json: { success: true, statusPageUrl: result.status_page_url })
