@@ -112,7 +112,7 @@ spec/                        # RSpec tests (primary framework)
 - **Preact + @preact/signals** for UI extensions
 - **PostgreSQL** database, **Redis** for caching
 
-See `.cursor/rules/tech-stack.mdc` for full dependency details.
+See `.claude/rules/tech-stack.md` for full dependency details.
 
 ## API Scopes
 
@@ -124,3 +124,39 @@ Generate new webhooks with:
 ```bash
 bin/rails g shopify_app:add_declarative_webhook --topic products/update --path webhooks/products_update
 ```
+
+## Claude Code Agents
+
+Three agents are available in `.claude/agents/`. Use them by name in prompts.
+
+### feature-build (full pipeline)
+For non-trivial features where design matters. Runs the complete pipeline:
+1. Clarifies requirements (asks 3+ questions)
+2. Researches codebase patterns + fetches external docs (Shopify API, Turbo, Polaris, etc.)
+3. Drafts spec v1 (likely bloated)
+4. DHH review #1 via `dhh-code-reviewer` subagent
+5. Drafts spec v2 (tighter)
+6. DHH review #2
+7. Final spec v3 -- pauses for your approval
+8. Builds the feature
+9. Writes RSpec tests after you confirm
+
+Usage: `Use the feature-build agent to build [requirements]`
+
+### application-architect (design only)
+For when you want an architecture plan without building anything. Researches the codebase and external docs, then produces a structured implementation plan with steps, code snippets, and trade-offs.
+
+Usage: `Use the application-architect agent to design [feature]`
+
+### dhh-code-reviewer (code review)
+Invoked automatically by `feature-build`, but can also be used standalone after writing any Ruby or JavaScript code. Reviews against DHH's standards for elegance, expressiveness, and idiomatic style.
+
+Usage: `Use the dhh-code-reviewer agent to review [files or changes]`
+
+## Claude Code Safety Hooks
+
+Configured in `.claude/settings.json` and `.claude/hooks/`:
+
+- **PreToolUse hook** (`.claude/hooks/pre_tool_use.sh`): Blocks dangerous `rm -rf` commands and direct `.env` file access
+- **PostToolUse hook**: Auto-runs `rubocop -a` on Ruby files and `prettier` on JS/TS/JSON/ERB after edits
+- **Database safety rules** (`.claude/rules/database-safety.md`): Forbids destructive DB operations (`db:drop`, `db:reset`, `destroy_all`, etc.)
