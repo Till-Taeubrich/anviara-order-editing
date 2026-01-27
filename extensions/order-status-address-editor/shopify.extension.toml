@@ -1,0 +1,30 @@
+# Learn more about configuring your checkout UI extension:
+# https://shopify.dev/docs/api/checkout-ui-extensions/latest/configuration
+
+# The version of APIs your extension will receive. Learn more:
+# https://shopify.dev/docs/api/usage/versioning
+api_version = "2025-10"
+
+[[extensions]]
+name = "Order status address editor"
+handle = "order-status-address-editor"
+uid = "4c185567-7b16-e211-eb7f-2e3dbd5fc290e3efc57d"
+type = "ui_extension"
+
+# Controls where in Shopify your extension will be injected,
+# and the file that contains your extension's source code. Learn more:
+# https://shopify.dev/docs/api/checkout-ui-extensions/latest/extension-targets-overview
+
+[[extensions.targeting]]
+module = "./src/OrderStatusAddressEditor.jsx"
+target = "customer-account.order-status.customer-information.render-after"
+
+[extensions.capabilities]
+# Gives your extension access to directly query Shopify's storefront API.
+# https://shopify.dev/docs/api/checkout-ui-extensions/latest/configuration#api-access
+api_access = true
+
+# Gives your extension access to make external network calls, using the
+# JavaScript `fetch()` API. Learn more:
+# https://shopify.dev/docs/api/checkout-ui-extensions/latest/configuration#network-access
+network_access = true

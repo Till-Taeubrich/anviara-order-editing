@@ -1,0 +1,25 @@
+{
+  "buttons": {
+    "editAddress": "Adresse bearbeiten",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "continue": "Weiter"
+  },
+
+  "fields": {
+    "firstName": "Vorname (optional)",
+    "lastName": "Nachname",
+    "address1": "Adresse",
+    "address2Optional": "Wohnung, Zimmer, usw. (optional)",
+    "zip": "Postleitzahl",
+    "city": "Stadt"
+  },
+
+  "errors": {
+    "networkError": "Netzwerkfehler. Bitte versuchen Sie es erneut.",
+    "updateFailed": "Fehler beim Aktualisieren der Adresse",
+    "invalidZip": "Eine gültige Postleitzahl für Deutschland eingeben"
+  },
+
+  "editAddress": "Adresse bearbeiten"
+}
