@@ -1,0 +1,48 @@
+# 37signals: Domain Driven Boldness
+
+Reference index: `37signals-style-index.md`
+
+## Architectural / design rules
+
+- **Don't be aseptic; double down on boldness**:
+  - Prefer vivid, domain-specific names that convey the concept precisely (often more memorable than generic CRUD vocabulary).
+
+  ```ruby
+  # Bold: the method name "decease" captures the domain concept precisely
+  module Person::Tombstonable
+    def decease
+      case
+      when deceasable?
+        erect_tombstone
+        remove_administratorships
+        remove_accesses_later
+        self
+      when deceased?
+        nil
+      else
+        raise ArgumentError, "an account owner cannot be removed. " \
+                             "You must transfer ownership first"
+      end
+    end
+  end
+  ```
+
+- **Model domain concepts as first-class code**:
+  - Represent "what the system is" in the language of the domain (entities, roles, states, and operations).
+
+- **Use naming to encode meaning and constraints**:
+  - A name like "petition" vs "request" carries policy/intent; use that to make domain rules self-evident.
+
+- **Use role-like modularization when it clarifies the domain**:
+  - Concerns (or similar composition) can express domain roles ("Examiner", "Petitioner") when they form cohesive units.
+
+- **Write plain-text domain descriptions first**:
+  - Use a short written description as a thinking tool to shape the domain model before or while coding.
+
+## Default stance in this codebase
+
+When the user says **"37signals style rails"**, these rules apply (see `37signals-style-index.md`).
+
+## Source
+
+`https://dev.37signals.com/domain-driven-boldness/`
