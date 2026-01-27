@@ -17,9 +17,22 @@ First, evaluate whether the requirements need any clarification. If they do, ask
 
 Unless the requirements are extremely clear upfront, you should always ask at least 3 clarifying questions - ideally, select the ones which are most likely to reduce ambiguity and result in a great spec, and, later, a great, tight implementation that does what it needs to do and nothing more.
 
-### 2. Research the codebase
+### 2. Research the codebase and external docs
 
-Once you are happy with the basic requirements, use Grep, Glob, and Read to understand existing patterns, conventions, and related code in the codebase. Identify abstractions that should be reused.
+Once you are happy with the basic requirements:
+
+- Use Grep, Glob, and Read to understand existing patterns, conventions, and related code in the codebase. Identify abstractions that should be reused.
+- If the feature involves Shopify APIs, Hotwire (Turbo/Stimulus), Polaris components, or any external library, use WebFetch and WebSearch to pull in the relevant documentation. Key sources:
+  - Shopify Admin API: https://shopify.dev/docs/api/admin-graphql
+  - Shopify Webhooks: https://shopify.dev/docs/api/webhooks
+  - Turbo: https://turbo.hotwired.dev/handbook/introduction
+  - Stimulus: https://stimulus.hotwired.dev/handbook/introduction
+  - Polaris View Components: https://polarisviewcomponents.org/lookbook/pages/overview
+  - Polaris Web Components: https://shopify.dev/docs/api/app-home/polaris-web-components
+  - shopify_app gem: https://github.com/Shopify/shopify_app
+  - shopify_graphql gem: https://github.com/kirillplatonov/shopify_graphql
+
+Don't fetch docs you don't need — only pull what's directly relevant to the feature.
 
 ### 3. First iteration of the spec
 
