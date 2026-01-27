@@ -1,0 +1,26 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/pre_tool_use.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path' | { read file_path; ext=\"${file_path##*.}\"; case \"$ext\" in js|ts|jsx|tsx|json) npx prettier --write \"$file_path\" 2>/dev/null ;; erb) if [[ \"$file_path\" == *.html.erb ]]; then npx prettier --write \"$file_path\" 2>/dev/null; fi ;; rb|rake) bundle exec rubocop -a \"$file_path\" 2>/dev/null ;; esac; }"
+          }
+        ]
+      }
+    ]
+  }
+}
