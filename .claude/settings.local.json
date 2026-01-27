@@ -2,7 +2,10 @@
   "mcpServers": {
     "shopify-dev-mcp": {
       "command": "npx",
-      "args": ["-y", "@shopify/dev-mcp@latest"],
+      "args": [
+        "-y",
+        "@shopify/dev-mcp@latest"
+      ],
       "env": {
         "OPT_OUT_INSTRUMENTATION": "true",
         "POLARIS_UNIFIED": "true",
@@ -14,7 +17,7 @@
       "args": [
         "-y",
         "@modelcontextprotocol/server-postgres",
-        "postgresql://till@localhost:5432/shopify_hotwire_template_development"
+        "postgresql://till@localhost:5432/anviara_order_editing_development"
       ]
     },
     "tidewave": {
