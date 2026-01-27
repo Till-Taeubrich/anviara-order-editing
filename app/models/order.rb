@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Order < ApplicationRecord
+  include AddressEditable
+
   belongs_to :shop
   has_many :fulfillment_orders, dependent: :destroy
 

@@ -13,16 +13,19 @@ Rails.application.routes.draw do
   resource :settings_page, only: :show, controller: :settings_page
   resource :components_page, only: :show, controller: :components_page
   resource :redirect_page, only: :show, controller: :redirect_page
-  resource :frontend_request, only: :create, controller: :frontend_request
-
-  resource :subscription, only: :new do
-    resource :callback, only: :show, module: :subscription
+  namespace :api do
+    resources :shipping_address_updates, only: :create
+    match "/shipping_address_updates", to: "shipping_address_updates#options", via: :options
   end
 
   scope path: :api, format: :json do
     namespace :webhooks do
       post "fulfillment_orders_routing_complete", to: "fulfillment_orders_routing_complete#receive"
     end
+  end
+
+  resource :subscription, only: :new do
+    resource :callback, only: :show, module: :subscription
   end
 
   mount ShopifyApp::Engine, at: "/"

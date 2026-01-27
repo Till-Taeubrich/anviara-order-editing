@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+cloudflared tunnel --config .cloudflared/config.yml --url localhost:3000 run anviara-order-editing

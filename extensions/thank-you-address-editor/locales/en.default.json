@@ -1,0 +1,24 @@
+{
+  "buttons": {
+    "editAddress": "Edit address",
+    "cancel": "Cancel",
+    "save": "Save",
+    "continue": "Continue"
+  },
+
+  "fields": {
+    "firstName": "First name",
+    "lastName": "Last name",
+    "address1": "Address",
+    "address2Optional": "Apartment, suite, etc. (optional)",
+    "zip": "ZIP code",
+    "city": "City"
+  },
+
+  "errors": {
+    "networkError": "Network error. Please try again.",
+    "updateFailed": "Failed to update address"
+  },
+
+  "editAddress": "Edit address"
+}

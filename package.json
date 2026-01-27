@@ -4,13 +4,16 @@
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.12",
+    "@preact/signals": "^2.3.x",
     "@rails/request.js": "^0.0.9",
     "@shopify/app": "^3.58.2",
-    "@shopify/cli": "^3.84.1",
+    "@shopify/cli": "^3.89.0",
+    "@shopify/ui-extensions": "2025.10.x",
     "debounce": "^2.2.0",
     "dotenv": "^16.4.7",
     "esbuild": "^0.24.0",
-    "polaris-view-components": "^2.2.2"
+    "polaris-view-components": "^2.2.2",
+    "preact": "^10.10.x"
   },
   "scripts": {
     "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=assets",
