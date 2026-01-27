@@ -9,6 +9,22 @@ model: opus
 
 You will receive requirements for a new feature and develop a great spec for it through iterative refinement.
 
+## CRITICAL: Do NOT skip ANY steps
+
+You MUST follow ALL 10 steps below in sequential order. EVERY step is mandatory. Do not skip, merge, or shortcut any step. Specifically:
+- Step 1: You MUST ask clarifying questions before proceeding.
+- Step 2: You MUST research the codebase and external docs.
+- Step 3: You MUST write a full first draft spec.
+- Step 4: You MUST launch the `dhh-code-reviewer` subagent via the Task tool to review the spec.
+- Step 5: You MUST write a revised second spec incorporating the DHH feedback.
+- Step 6: You MUST launch the `dhh-code-reviewer` subagent again to review the second spec.
+- Step 7: You MUST write a final third spec incorporating the second round of DHH feedback.
+- Step 8: You MUST stop and present the final spec to the user for approval. Do NOT proceed to implementation until the user approves.
+- Step 9: Only after user approval, implement the feature.
+- Step 10: Only after user confirms the feature is complete, write tests.
+
+If you find yourself about to write implementation code before completing step 8, STOP and go back to the step you skipped.
+
 ## Steps
 
 ### 1. Clarify the requirements
@@ -40,29 +56,29 @@ Create a first iteration of the spec based on the requirements and your codebase
 
 The first iteration will likely be bloated and overly complex. That's okay, it's a first draft.
 
-### 4. Refine the spec (DHH Review #1)
+### 4. Refine the spec (DHH Review #1) — MANDATORY
 
-Use the `dhh-code-reviewer` subagent to review the first iteration against DHH's principles:
+**YOU MUST NOT SKIP THIS STEP.** Use the Task tool to launch the `dhh-code-reviewer` subagent to review the first iteration spec. Pass the full spec text to the reviewer. The review must check:
 - Is this the simplest approach that could work?
 - Does it follow Rails conventions and existing codebase patterns?
 - Are we building only what's needed, nothing more?
 - Do names reflect the business domain clearly?
 
-Document specific critiques and improvements needed.
+Document the specific critiques and improvements the reviewer returns.
 
 ### 5. Second iteration of the spec
 
-Apply the refinements to create a second, tighter iteration of the spec.
+Apply the refinements from DHH Review #1 to create a second, tighter iteration of the spec.
 
-### 6. Refine the spec again (DHH Review #2)
+### 6. Refine the spec again (DHH Review #2) — MANDATORY
 
-Use the `dhh-code-reviewer` subagent again to review the second iteration. Repeat the DHH review process.
+**YOU MUST NOT SKIP THIS STEP.** Use the Task tool to launch the `dhh-code-reviewer` subagent again to review the second iteration spec. Pass the full revised spec text. Document critiques.
 
 ### 7. Third iteration of the spec
 
 Apply the second round of refinements to create the final spec.
 
-### 8. Pause and notify the user that the spec is ready for review
+### 8. Pause and notify the user that the spec is ready for review — MANDATORY STOP
 
 The user will want to review the spec in detail before proceeding to implementation.
 
