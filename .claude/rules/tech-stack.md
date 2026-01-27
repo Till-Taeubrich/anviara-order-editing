@@ -1,0 +1,267 @@
+# Application Stack and Dependencies
+
+This document outlines the complete technology stack, dependency versions, and best practices for this Shopify Rails Hotwire application.
+
+## Core Runtime Versions
+
+### Ruby
+- **Version**: `3.3.6` (specified in `.ruby-version`)
+- **Bundler**: `2.5.16`
+- **Best Practice**: Ruby 3.3.6 is a stable, recent patch release. Keep `.ruby-version` in sync with CI/CD configurations.
+
+### Node.js / JavaScript
+- **Package Manager**: Yarn
+- **Build Tool**: esbuild `0.24.0`
+- **Best Practice**: Use `yarn` for all JavaScript dependency management. The project uses esbuild for fast, modern JavaScript bundling.
+
+## Backend Stack (Ruby/Rails)
+
+### Rails Framework
+- **Rails**: `~> 8.0.0` (currently `8.0.0`)
+- **Best Practice**: Rails 8.0 is the latest major version. Be aware of new features and breaking changes:
+  - Solid Queue for background jobs (replaces ActiveJob adapters)
+  - Enhanced Turbo integration
+  - Improved security defaults
+  - Use Rails 8 conventions for new code
+
+### Core Backend Dependencies
+
+#### Database & Sessions
+- **PostgreSQL**: `pg ~> 1.1` (currently `1.5.9`)
+- **Session Store**: `activerecord-session_store` (currently `2.1.0`)
+- **Best Practice**:
+  - Use PostgreSQL-specific features when beneficial
+  - Session data stored in database via ActiveRecord (not cookies)
+  - Ensure database migrations are reversible
+
+#### Web Server
+- **Puma**: `~> 6.0` (currently `6.5.0`)
+- **Best Practice**: Configure Puma workers/threads in `config/puma.rb` based on deployment environment
+
+#### Caching & Background Jobs
+- **Redis**: `~> 5.0` (currently `5.3.0`)
+- **Best Practice**: Redis is used for caching and potentially Action Cable. Ensure Redis connection pooling is configured.
+
+#### Asset Pipeline
+- **jsbundling-rails**: `1.3.1` - Modern JavaScript bundling
+- **sprockets-rails**: `3.5.2` - Legacy asset pipeline support
+- **Best Practice**:
+  - Use `jsbundling-rails` for JavaScript (esbuild)
+  - Use Sprockets for CSS and legacy assets
+  - Build assets with `yarn build` or `bin/dev`
+
+### Shopify Integration
+
+#### Shopify Gems
+- **shopify_app**: `~> 22.5.0` (currently `22.5.0`)
+- **shopify_graphql**: `~> 2.0` (currently `2.0.0`)
+- **shopify_api**: `14.7.0` (dependency of shopify_app)
+- **polaris_view_components**: `~> 2.0` (currently `2.2.4`)
+- **Best Practice**:
+  - `shopify_app` 22.5.x is the latest stable version for Rails 8
+  - Use `shopify_graphql` for GraphQL queries (see `app/graphql/`)
+  - **Polaris Web Components are preferred** - Use web components (e.g., `<shopify-store>`, `<shopify-cart>`) whenever the needed component is available as a web component for better client-side interactivity
+  - **Polaris View Components act as a backup option** - Use server-side rendered View Components when web components aren't available or for server-rendered content
+  - Always use `current_shop.with_shopify_session` for API calls
+  - JWT authentication is handled automatically via AppBridge
+
+### Hotwire Stack
+
+#### Turbo & Stimulus
+- **turbo-rails**: `2.0.11` (Ruby gem)
+- **stimulus-rails**: `1.3.4` (Ruby gem)
+- **@hotwired/turbo-rails**: `^8.0.12` (currently `8.0.12`) - JavaScript package
+- **@hotwired/stimulus**: `^3.2.2` (currently `3.2.2`) - JavaScript package
+- **Best Practice**:
+  - Turbo 8.x includes significant improvements (morphing, better caching)
+  - Use Turbo Streams for real-time updates (`.turbo_stream.erb` templates)
+  - Stimulus 3.x is the latest - use modern controller patterns
+  - JWT tokens are automatically appended to Turbo requests via `app/javascript/shopify_app/shopify_app.js`
+
+#### Request.js
+- **@rails/request.js**: `^0.0.9` (currently `0.0.9`)
+- **Best Practice**: Use Request.js for fetch-based requests with automatic JWT handling via RequestInterceptor
+
+### Development Dependencies
+
+#### Testing
+- **rspec-rails**: `7.2.0.pre` (from GitHub master branch)
+- **capybara**: `3.40.0`
+- **selenium-webdriver**: `4.27.0`
+- **vcr**: `6.3.1`
+- **webmock**: `3.24.0`
+- **mocha**: `2.7.0`
+- **Best Practice**:
+  - RSpec is the primary testing framework (not Minitest)
+  - Use VCR for HTTP request recording in tests
+  - System tests use Capybara with Selenium
+
+#### Code Quality
+- **rubocop-shopify**: `~> 2.16` (currently `2.16.0`)
+- **rubocop**: `1.75.2` (dependency)
+- **Best Practice**:
+  - Follow Shopify's Ruby style guide
+  - Run `bundle exec rubocop` before committing
+  - Auto-fix with `bundle exec rubocop -a`
+
+#### Development Tools
+- **debug**: `1.9.2` - Ruby debugger
+- **pry-rails**: `0.3.11` - Enhanced REPL
+- **foreman**: `0.88.1` - Process management
+- **hotwire-livereload**: `1.4.1` - Live reloading
+- **tidewave**: `0.4.1` - Development tooling
+- **http_logger**: `0.7.0` - HTTP request logging
+- **web-console**: `4.2.1` - Browser console
+
+## Frontend Stack (JavaScript)
+
+### Shopify CLI & App Tools
+- **@shopify/app**: `^3.58.2` (currently `3.58.2`)
+- **@shopify/cli**: `^3.71.4` (currently `3.71.4`)
+- **Best Practice**:
+  - Use `yarn dev` (aliases to `shopify app dev`) for development
+  - Shopify CLI 3.x is the latest generation
+  - CLI handles tunneling, OAuth, and app proxy setup
+
+### UI Components
+- **polaris-view-components**: `^2.2.2` (currently `2.2.2`)
+- **Best Practice**:
+  - **Polaris Web Components are preferred** - Use web components (e.g., `<shopify-store>`, `<shopify-cart>`) whenever the needed component is available as a web component for better client-side interactivity
+  - **Polaris View Components act as a backup option** - This JavaScript package works with the Ruby `polaris_view_components` gem for server-side rendering when web components aren't available
+  - Use Polaris components for consistent Shopify admin UI
+  - View Components are rendered server-side via ViewComponent
+
+### Build & Utilities
+- **esbuild**: `^0.24.0` (currently `0.24.0`)
+- **debounce**: `^2.2.0` (currently `2.2.0`)
+- **dotenv**: `^16.4.7` (currently `16.4.7`)
+- **Best Practice**:
+  - esbuild 0.24.x is recent and stable
+  - Use debounce for performance optimization in Stimulus controllers
+  - dotenv for environment variable management (complements `dotenv-rails`)
+
+## Dependency Management Best Practices
+
+### Ruby Dependencies
+1. **Version Constraints**:
+   - Use `~>` for minor version constraints (allows patch updates)
+   - Pin exact versions only when necessary for stability
+   - Review `Gemfile.lock` regularly for security updates
+
+2. **Updating Dependencies**:
+   ```bash
+   bundle update <gem-name>  # Update specific gem
+   bundle update             # Update all gems (use with caution)
+   bundle audit              # Check for security vulnerabilities
+   ```
+
+3. **Special Cases**:
+   - `rspec-rails` is pulled from GitHub master (pre-release)
+   - Consider pinning to stable release for production
+
+### JavaScript Dependencies
+1. **Version Constraints**:
+   - Use `^` for compatible version updates (allows minor/patch)
+   - Use exact versions for critical dependencies if needed
+
+2. **Updating Dependencies**:
+   ```bash
+   yarn upgrade <package>    # Update specific package
+   yarn upgrade              # Update all packages
+   yarn audit                # Check for security vulnerabilities
+   ```
+
+3. **Lock File**:
+   - Always commit `yarn.lock` to version control
+   - Ensures consistent installs across environments
+
+## Version Compatibility Matrix
+
+| Component | Version | Compatible With |
+|-----------|---------|-----------------|
+| Ruby | 3.3.6 | Rails 8.0+ |
+| Rails | 8.0.0 | Ruby 3.1+ |
+| shopify_app | 22.5.0 | Rails 5.2.1+, shopify_api 14.7.0 |
+| shopify_graphql | 2.0.0 | Rails 6.1+, shopify_app 19.0+ |
+| Turbo Rails | 2.0.11 | Rails 6.0+ |
+| Stimulus Rails | 1.3.4 | Rails 6.0+ |
+| Polaris View Components | 2.2.4 | Rails 5.0+, ViewComponent 3.0+ |
+
+## Security Considerations
+
+1. **Regular Updates**:
+   - Run `bundle audit` and `yarn audit` regularly
+   - Update dependencies with known vulnerabilities immediately
+
+2. **JWT Handling**:
+   - JWT tokens are automatically managed by `shopify_app` gem
+   - Tokens are appended to Turbo and Request.js calls automatically
+   - Never expose JWT tokens in logs or client-side code
+
+3. **Session Management**:
+   - Sessions stored in database (not cookies)
+   - Ensure session cleanup for expired sessions
+
+## Performance Considerations
+
+1. **Asset Bundling**:
+   - esbuild provides fast builds
+   - Use `yarn build` for production assets
+   - Consider asset minification for production
+
+2. **Database**:
+   - Use PostgreSQL connection pooling
+   - Index frequently queried columns
+   - Use `explain` to analyze slow queries
+
+3. **Caching**:
+   - Redis is available for caching
+   - Use Rails.cache for fragment caching
+   - Consider caching GraphQL query results when appropriate
+
+## Development Workflow
+
+1. **Starting Development**:
+   ```bash
+   bin/setup          # Initial setup
+   bin/dev            # Start development server (uses Foreman)
+   yarn dev           # Alternative: uses Shopify CLI
+   ```
+
+2. **Running Tests**:
+   ```bash
+   bundle exec rspec  # Run RSpec tests
+   bundle exec rails test  # Run Minitest tests (legacy)
+   ```
+
+3. **Code Quality**:
+   ```bash
+   bundle exec rubocop           # Check style
+   bundle exec rubocop -a        # Auto-fix
+   ```
+
+## Migration Notes
+
+### Upgrading Rails 8.0
+- Review Rails 8.0 release notes for breaking changes
+- Solid Queue replaces traditional background job adapters
+- Enhanced Turbo integration may require template updates
+
+### Upgrading Shopify App Gem
+- Check Shopify changelog for API changes
+- Review GraphQL schema changes
+- Test OAuth flow after upgrades
+
+### Upgrading Hotwire
+- Turbo 8.x includes morphing capabilities
+- Review Turbo Stream template syntax
+- Stimulus 3.x has improved controller lifecycle
+
+## Additional Resources
+
+- [Rails 8.0 Release Notes](https://edgeguides.rubyonrails.org/8_0_release_notes.html)
+- [Shopify App Gem Documentation](https://github.com/Shopify/shopify_app)
+- [Hotwire Documentation](https://hotwired.dev/)
+- [Polaris View Components](https://polarisviewcomponents.org/lookbook/pages/overview)
+- [Polaris Web Components](https://shopify.dev/docs/api/app-home/polaris-web-components)
+- [Stimulus Handbook](https://stimulus.hotwired.dev/handbook/introduction)
