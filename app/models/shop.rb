@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Shop < ActiveRecord::Base
+class Shop < ApplicationRecord
   include ShopifyApp::ShopSessionStorageWithScopes
 
   has_many :orders, dependent: :destroy
@@ -21,6 +21,10 @@ class Shop < ActiveRecord::Base
 
   def admin_url(path = nil)
     "https://admin.shopify.com/store/#{shop_handle}#{path}"
+  end
+
+  def complete_onboarding!
+    update!(onboarding_completed: true)
   end
 
   def should_hold_fulfillment_order?

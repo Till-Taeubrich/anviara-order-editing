@@ -12,6 +12,7 @@
 
     <meta name="shopify-api-key" content="<%= ShopifyApp.configuration.api_key %>">
     <%= javascript_include_tag "https://cdn.shopify.com/shopifycloud/app-bridge.js" %>
+    <%= javascript_include_tag "https://cdn.shopify.com/shopifycloud/polaris.js" %>
 
     <%= javascript_include_tag "application" %>
     <%= hotwire_livereload_tags if Rails.env.development? %>

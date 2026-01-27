@@ -7,6 +7,8 @@ Rails.application.routes.draw do
 
   get "/home", to: "home#index"
 
+  resource :onboarding, only: [:show, :update], controller: :onboarding
+
   resources :products, only: [:index]
   resource :messages, only: :create
   resource :redirect, only: :new

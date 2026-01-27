@@ -7,13 +7,11 @@ class AuthenticatedController < ApplicationController
 
   before_action :set_app_bridge_headers
   before_action :set_current_shop
+  before_action :ensure_shop_settings
+  before_action :require_onboarding
   # before_action :check_subscription
 
   helper_method :current_shop, :jwt_expire_at, :current_session_id, :dev_admin?
-
-  def set_current_shop
-    @current_shop = Shop.find_by(shopify_domain: current_shopify_domain)
-  end
 
   def default_url_options
     { shop: current_shopify_domain, session: current_session_id }
@@ -24,6 +22,10 @@ class AuthenticatedController < ApplicationController
   end
 
   private
+
+  def set_current_shop
+    @current_shop = Shop.find_by(shopify_domain: current_shopify_domain)
+  end
 
   def current_session_id
     @current_session_id ||= params[:session].presence || request.headers["X-Shopify-Session-Id"]
@@ -38,6 +40,14 @@ class AuthenticatedController < ApplicationController
 
   def turbo_flashes
     turbo_stream.replace("shopify-app-flash", partial: "layouts/flash_messages.html.erb")
+  end
+
+  def ensure_shop_settings
+    current_shop&.setup!
+  end
+
+  def require_onboarding
+    redirect_to(onboarding_path(**id_token_param)) unless current_shop.onboarding_completed?
   end
 
   def check_subscription

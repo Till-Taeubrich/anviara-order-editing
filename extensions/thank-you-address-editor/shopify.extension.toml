@@ -6,7 +6,7 @@
 api_version = "2025-10"
 
 [[extensions]]
-name = "Thank you address editor"
+name = "Address editor"
 handle = "thank-you-address-editor"
 type = "ui_extension"
 uid = "648e6aab-0f98-da03-98e4-ed62ebcc8741dcafc0cd"

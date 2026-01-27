@@ -1,0 +1,26 @@
+<s-page heading="Onboarding">
+  <s-grid gridTemplateColumns="1fr 1fr" gap="base">
+    <%= render "extension_setup_steps",
+          heading: "Thank-you extension",
+          page_name: "thank-you page",
+          editor_url: current_shop.admin_url("/settings/checkout/editor?page=thank-you&context=extensibility") %>
+
+    <%= render "extension_setup_steps",
+          heading: "Order status extension",
+          page_name: "order status page",
+          editor_url: current_shop.admin_url("/settings/checkout/editor?page=order-status&context=extensibility") %>
+  </s-grid>
+
+  <s-box paddingBlockStart="large">
+  <s-stack direction="inline" justifyContent="end" gap="base">
+    <s-button onclick="window.$crisp.push(['do', 'chat:open']); window.$crisp.push(['set', 'message:text', ['Help me with the app setup.']])">
+      Need help?
+    </s-button>
+    <%= form_with(url: onboarding_path, method: :patch) do %>
+      <s-button variant="primary" type="submit">
+        I've added both extensions
+      </s-button>
+    <% end %>
+  </s-stack>
+  </s-box>
+</s-page>

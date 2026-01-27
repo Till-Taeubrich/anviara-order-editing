@@ -6,7 +6,7 @@
 api_version = "2025-10"
 
 [[extensions]]
-name = "Order status address editor"
+name = "Address editor"
 handle = "order-status-address-editor"
 uid = "4c185567-7b16-e211-eb7f-2e3dbd5fc290e3efc57d"
 type = "ui_extension"
