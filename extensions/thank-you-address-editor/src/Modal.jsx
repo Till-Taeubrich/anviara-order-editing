@@ -74,43 +74,62 @@ function Modal() {
     (f) => address[f.name] !== originalAddress[f.name],
   );
 
+  async function submitUpdate() {
+    const sessionToken = await shopify.sessionToken.get();
+    const orderId = shopify.orderConfirmation.value.order.id.replace(
+      "OrderIdentity",
+      "Order",
+    );
+    const response = await fetch(
+      `${BACKEND_URL}/api/shipping_address_updates`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionToken}`,
+        },
+        body: JSON.stringify({
+          order_id: orderId,
+          address: Object.fromEntries(
+            Object.entries(address).map(([k, v]) => [k, v.trim()]),
+          ),
+        }),
+      },
+    );
+    return response.json();
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
 
-    try {
-      const sessionToken = await shopify.sessionToken.get();
-      const orderId = shopify.orderConfirmation.value.order.id.replace(
-        "OrderIdentity",
-        "Order",
-      );
-      const response = await fetch(
-        `${BACKEND_URL}/api/shipping_address_updates`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${sessionToken}`,
-          },
-          body: JSON.stringify({
-            order_id: orderId,
-            address: Object.fromEntries(
-              Object.entries(address).map(([k, v]) => [k, v.trim()]),
-            ),
-          }),
-        },
-      );
+    const maxRetryMs = 15000;
+    const retryIntervalMs = 2000;
+    const startTime = Date.now();
 
-      const data = await response.json();
-      if (response.ok && data.success) {
-        setSuccess(true);
-        setStatusPageUrl(data.statusPageUrl);
-      } else {
-        setError(
-          data.errors?.[0] || shopify.i18n.translate("errors.updateFailed"),
-        );
+    try {
+      let data;
+      while (true) {
+        data = await submitUpdate();
+
+        if (data.success) {
+          setSuccess(true);
+          setStatusPageUrl(data.statusPageUrl);
+          return;
+        }
+
+        if (data.retryable && Date.now() - startTime < maxRetryMs) {
+          await new Promise((r) => setTimeout(r, retryIntervalMs));
+          continue;
+        }
+
+        break;
       }
+
+      setError(
+        data.errors?.[0] || shopify.i18n.translate("errors.updateFailed"),
+      );
     } catch {
       setError(shopify.i18n.translate("errors.networkError"));
     } finally {
