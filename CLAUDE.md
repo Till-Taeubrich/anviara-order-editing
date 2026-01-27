@@ -43,8 +43,8 @@ yarn env show -c production  # Get production env vars
 
 The thank-you page extension (`extensions/thank-you-address-editor/`) communicates with the Rails backend:
 
-1. Extension POSTs to `/frontend_request` with shop domain, order ID, and address data
-2. `FrontendRequestController` skips CSRF and sets CORS headers for cross-origin requests
+1. Extension POSTs to `/api/shipping_address_updates` with shop domain, order ID, and address data
+2. `Api::ShippingAddressUpdatesController` skips CSRF and sets CORS headers for cross-origin requests
 3. Backend calls GraphQL mutation (`UpdateOrderAddress`) within Shopify session
 4. Returns JSON: `{success: bool, statusPageUrl: string, errors: []}`
 
@@ -82,7 +82,8 @@ This project follows 37signals architectural patterns (see `.cursor/rules/37sign
 app/
 ├── controllers/
 │   ├── authenticated_controller.rb  # Base for authenticated routes
-│   └── frontend_request_controller.rb  # API for extension calls
+│   └── api/
+│       └── shipping_address_updates_controller.rb  # API for extension calls
 ├── graphql/                # Shopify GraphQL queries/mutations
 ├── javascript/
 │   ├── controllers/        # Stimulus controllers

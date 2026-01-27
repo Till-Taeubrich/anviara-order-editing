@@ -12,3 +12,6 @@ Style/Documentation:
   
 Style/ClassMethodsDefinitions:
   Enabled: false
+
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact

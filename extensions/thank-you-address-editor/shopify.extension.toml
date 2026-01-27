@@ -6,21 +6,21 @@
 api_version = "2025-10"
 
 [[extensions]]
-name = "Order editing"
-handle = "order-editing"
+name = "Thank you address editor"
+handle = "thank-you-address-editor"
 type = "ui_extension"
 uid = "648e6aab-0f98-da03-98e4-ed62ebcc8741dcafc0cd"
 
 # Controls where in Shopify your extension will be injected,
-# and the file that contains your extension’s source code. Learn more:
+# and the file that contains your extension's source code. Learn more:
 # https://shopify.dev/docs/api/checkout-ui-extensions/latest/extension-targets-overview
 
 [[extensions.targeting]]
-module = "./src/Checkout.jsx"
+module = "./src/ThankYouAddressEditor.jsx"
 target = "purchase.thank-you.customer-information.render-after"
 
 [extensions.capabilities]
-# Gives your extension access to directly query Shopify’s storefront API.
+# Gives your extension access to directly query Shopify's storefront API.
 # https://shopify.dev/docs/api/checkout-ui-extensions/latest/configuration#api-access
 api_access = true
 
