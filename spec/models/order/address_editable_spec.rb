@@ -28,9 +28,8 @@ RSpec.describe(Order::AddressEditable, type: :model) do
     end
 
     it "returns errors when user errors present" do
-      user_error = double("userError", message: "Invalid address")
-      error_data = double("data", userErrors: [user_error], order: nil)
-      allow(UpdateOrderAddress).to(receive(:call).and_return(double("result", data: error_data)))
+      error = ShopifyGraphql::UserError.new
+      allow(UpdateOrderAddress).to(receive(:call).and_raise(error, "Invalid address"))
 
       result = Order.update_shipping_address(shop: shop, order_id: order_id, address: address)
 
