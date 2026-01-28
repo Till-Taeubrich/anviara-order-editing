@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   scope path: :api, format: :json do
     namespace :webhooks do
       post "fulfillment_orders_routing_complete", to: "fulfillment_orders_routing_complete#receive"
+      post "compliance", to: "compliance#receive"
     end
   end
 
