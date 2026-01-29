@@ -1,7 +1,26 @@
-<%= polaris_page(title: "Settings page") do %>
-  <%= polaris_card do %>
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac lectus elit. Integer ullamcorper, odio vel volutpat finibus, mauris ante tristique magna, vel lobortis sem ante eu eros. Nulla facilisi. Sed venenatis arcu ut odio ullamcorper tempor. Sed euismod ullamcorper neque, vitae posuere felis auctor sit amet. Ut vulputate, eros et bibendum egestas, lectus lorem cursus velit, non interdum nibh tortor id magna. Proin consectetur dolor id fringilla varius.
-    </p>
-  <% end %>
-<% end %>
+<s-page heading="Settings" inlineSize="small">
+  <s-section heading="Order editing window">
+    <s-text>
+      Set how long customers can edit their shipping address after placing an order.
+      Fulfillment is placed on hold during this window to allow address changes.
+    </s-text>
+
+    <%= form_with model: @settings, url: settings_page_path, method: :patch do |form| %>
+      <s-box paddingBlockStart="base">
+        <s-select
+          label="Editing window"
+          name="settings[hold_duration_minutes]"
+          value="<%= @settings.hold_duration_minutes %>"
+        >
+          <% Settings.hold_duration_options_for_select.each do |label, value| %>
+            <s-option value="<%= value %>" <%= 'selected' if value == @settings.hold_duration_minutes %>><%= label %></s-option>
+          <% end %>
+        </s-select>
+      </s-box>
+
+      <s-box paddingBlockStart="base">
+        <s-button variant="primary" type="submit">Save</s-button>
+      </s-box>
+    <% end %>
+  </s-section>
+</s-page>

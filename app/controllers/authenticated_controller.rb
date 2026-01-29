@@ -39,7 +39,7 @@ class AuthenticatedController < ApplicationController
   end
 
   def turbo_flashes
-    turbo_stream.replace("shopify-app-flash", partial: "layouts/flash_messages.html.erb")
+    turbo_stream.replace("shopify-app-flash", partial: "layouts/flash_messages")
   end
 
   def ensure_shop_settings

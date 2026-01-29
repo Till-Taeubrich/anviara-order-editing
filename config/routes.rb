@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   resources :products, only: [:index]
   resource :messages, only: :create
   resource :redirect, only: :new
-  resource :settings_page, only: :show, controller: :settings_page
+  resource :settings_page, only: [:show, :update], controller: :settings_page
   resource :components_page, only: :show, controller: :components_page
   resource :redirect_page, only: :show, controller: :redirect_page
   namespace :api do
