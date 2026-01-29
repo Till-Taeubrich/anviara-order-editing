@@ -3,7 +3,11 @@
 require "rails_helper"
 
 RSpec.describe(Order::AddressEditable, type: :model) do
-  let(:shop) { Shop.create!(shopify_domain: "test.myshopify.com", shopify_token: "token") }
+  let(:shop) do
+    s = Shop.create!(shopify_domain: "test.myshopify.com", shopify_token: "token")
+    s.create_settings!(hold_duration_minutes: 30)
+    s
+  end
   let(:order_id) { "gid://shopify/Order/123" }
 
   let(:address) do
@@ -15,6 +19,44 @@ RSpec.describe(Order::AddressEditable, type: :model) do
   end
 
   describe ".update_shipping_address" do
+    context "when order exists and edit window expired" do
+      it "returns failure without calling the API" do
+        Order.create!(shopify_id: order_id, shop: shop, shopify_created_at: 45.minutes.ago)
+
+        expect(UpdateOrderAddress).not_to(receive(:call))
+
+        result = Order.update_shipping_address(shop: shop, order_id: order_id, address: address)
+
+        expect(result.success).to(be(false))
+        expect(result.errors).to(eq(["Editing window has expired"]))
+      end
+    end
+
+    context "when order exists and within edit window" do
+      it "proceeds with the API call" do
+        Order.create!(shopify_id: order_id, shop: shop, shopify_created_at: 10.minutes.ago)
+
+        graphql_order = double("order", statusPageUrl: "https://example.com/status")
+        graphql_data = double("data", userErrors: [], order: graphql_order)
+        allow(UpdateOrderAddress).to(receive(:call).and_return(double("result", data: graphql_data)))
+
+        result = Order.update_shipping_address(shop: shop, order_id: order_id, address: address)
+
+        expect(result.success).to(be(true))
+      end
+    end
+
+    context "when order does not exist in local database" do
+      it "proceeds with the API call" do
+        graphql_order = double("order", statusPageUrl: "https://example.com/status")
+        graphql_data = double("data", userErrors: [], order: graphql_order)
+        allow(UpdateOrderAddress).to(receive(:call).and_return(double("result", data: graphql_data)))
+
+        result = Order.update_shipping_address(shop: shop, order_id: order_id, address: address)
+
+        expect(result.success).to(be(true))
+      end
+    end
     it "returns success when no user errors" do
       graphql_order = double("order", statusPageUrl: "https://example.com/status")
       graphql_data = double("data", userErrors: [], order: graphql_order)

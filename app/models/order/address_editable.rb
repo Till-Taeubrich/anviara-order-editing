@@ -15,6 +15,10 @@ module Order::AddressEditable
 
   class_methods do
     def update_shipping_address(shop:, order_id:, address:)
+      order = shop.orders.find_by(shopify_id: order_id)
+
+      return AddressUpdateResult.failure(errors: ["Editing window has expired"]) if order&.edit_window_expired?
+
       shop.with_shopify_session do
         result = UpdateOrderAddress.call(order_id:, shipping_address: address)
         AddressUpdateResult.success(status_page_url: result.data.order.statusPageUrl)
