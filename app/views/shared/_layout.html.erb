@@ -1,0 +1,6 @@
+<ui-title-bar title="<%= title %>"></ui-title-bar>
+<s-page <%= raw(local_assigns[:page_options]) %>>
+  <s-box paddingBlockStart="base">
+    <%= yield %>
+  </s-box>
+</s-page>

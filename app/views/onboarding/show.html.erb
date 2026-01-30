@@ -1,4 +1,4 @@
-<s-page heading="Onboarding">
+<%= render layout: "shared/layout", locals: { title: "Onboarding" } do %>
   <s-grid gridTemplateColumns="1fr 1fr" gap="base">
     <%= render "extension_setup_steps",
           heading: "Thank-you extension",
@@ -12,15 +12,15 @@
   </s-grid>
 
   <s-box paddingBlockStart="large">
-  <s-stack direction="inline" justifyContent="end" gap="base">
-    <s-button onclick="window.$crisp.push(['do', 'chat:open']); window.$crisp.push(['set', 'message:text', ['Help me with the app setup.']])">
-      Need help?
-    </s-button>
-    <%= form_with(url: onboarding_path, method: :patch) do %>
-      <s-button variant="primary" type="submit">
-        I've added both extensions
+    <s-stack direction="inline" justifyContent="end" gap="base">
+      <s-button onclick="window.$crisp.push(['do', 'chat:open']); window.$crisp.push(['set', 'message:text', ['Help me with the app setup.']])">
+        Need help?
       </s-button>
-    <% end %>
-  </s-stack>
+      <%= form_with(url: onboarding_path, method: :patch) do %>
+        <s-button variant="primary" type="submit">
+          I've added both extensions
+        </s-button>
+      <% end %>
+    </s-stack>
   </s-box>
-</s-page>
+<% end %>

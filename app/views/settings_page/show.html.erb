@@ -1,11 +1,12 @@
-<s-page heading="Settings" inlineSize="small">
-  <s-section heading="Order editing window">
-    <s-text>
-      Set how long customers can edit their shipping address after placing an order.
-      Fulfillment is placed on hold during this window to allow address changes.
-    </s-text>
+<%= render layout: "shared/layout", locals: { title: "Settings", page_options: 'inlineSize="small"' } do %>
+  <%= form_with model: @settings, url: settings_page_path, method: :patch, data: { save_bar: true } do |form| %>
+    <!-- Order Editing Window -->
+    <s-section heading="Order editing window">
+      <s-text>
+        Set how long customers can edit their shipping address after placing an order.
+        Fulfillment is placed on hold during this window to allow address changes.
+      </s-text>
 
-    <%= form_with model: @settings, url: settings_page_path, method: :patch do |form| %>
       <s-box paddingBlockStart="base">
         <s-select
           label="Editing window"
@@ -18,9 +19,6 @@
         </s-select>
       </s-box>
 
-      <s-box paddingBlockStart="base">
-        <s-button variant="primary" type="submit">Save</s-button>
-      </s-box>
-    <% end %>
-  </s-section>
-</s-page>
+    </s-section>
+  <% end %>
+<% end %>
